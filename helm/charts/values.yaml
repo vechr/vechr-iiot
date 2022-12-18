@@ -138,7 +138,7 @@ common:
   frontend:
     name: web-app
     image: zulfikar4568/web-app
-    tag: v1.2.2
+    tag: latest
     enabled: true
 
     # imagePullPolicy: Always is recommended when using latest tags. Otherwise, please use IfNotPresent
@@ -178,7 +178,7 @@ microservices:
   -
     name: audit-service
     image: zulfikar4568/audit-service
-    tag: v1.0.1
+    tag: latest
     enabled: true
 
     # imagePullPolicy: Always is recommended when using latest tags. Otherwise, please use IfNotPresent
@@ -220,7 +220,7 @@ microservices:
   -
     name: auth-service
     image: zulfikar4568/auth-service
-    tag: v1.0.1
+    tag: latest
     enabled: true
 
     # imagePullPolicy: Always is recommended when using latest tags. Otherwise, please use IfNotPresent
@@ -268,7 +268,7 @@ microservices:
   -
     name: db-logger-service
     image: zulfikar4568/db-logger-service
-    tag: v1.0.1
+    tag: latest
     enabled: true
 
     # imagePullPolicy: Always is recommended when using latest tags. Otherwise, please use IfNotPresent
@@ -316,7 +316,7 @@ microservices:
   -
     name: notification-service
     image: zulfikar4568/notification-service
-    tag: v1.0.1
+    tag: latest
     enabled: true
 
     # imagePullPolicy: Always is recommended when using latest tags. Otherwise, please use IfNotPresent
@@ -366,7 +366,7 @@ microservices:
   -
     name: things-service
     image: zulfikar4568/things-service
-    tag: v1.0.0
+    tag: latest
     enabled: true
 
     # imagePullPolicy: Always is recommended when using latest tags. Otherwise, please use IfNotPresent
