@@ -1,0 +1,15 @@
+{{if and (.Values.nats.nats.jetstream.fileStorage.enabled) (.Values.nats.nats.jetstream.fileStorage.existingClaim)}}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{.Values.nats.nats.jetstream.fileStorage.existingClaim}}
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "default"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{.Values.nats.nats.jetstream.fileStorage.claimStorageSize}}
+{{end}}

@@ -14,78 +14,88 @@ helm install vechr vechr/vechr
 ### Ingress
 ```yaml
 ingresses:
-  -
-    name: audit-kong-service
+  name: vechr-ingress
+  enabled: true
+  namespace: default
+  ingressClassName: kong
+
+  tls:
     enabled: true
-    services:
-      -
-        name: vechr-microservice-audit-service
-        path: /api/v2/audit
-        port: 3004
-      -
-        name: vechr-microservice-audit-service
-        path: /api/v1/audit
-        port: 3004
-      -
-        name: vechr-microservice-audit-service
-        path: /api/audit
-        port: 3004
-  -
-    name: auth-kong-service
-    enabled: true
-    services:
-      -
-        name: vechr-microservice-auth-service
-        path: /api/v2/auth
-        port: 3005
-      -
-        name: vechr-microservice-auth-service
-        path: /api/v1/auth
-        port: 3005
-      -
-        name: vechr-microservice-auth-service
-        path: /api/auth
-        port: 3005
-  -
-    name: notification-kong-service
-    enabled: true
-    services:
-      -
-        name: vechr-microservice-notification-service
-        path: /api/v2/notification
-        port: 3002
-      -
-        name: vechr-microservice-notification-service
-        path: /api/v1/notification
-        port: 3002
-      -
-        name: vechr-microservice-notification-service
-        path: /api/notification
-        port: 3002
-  -
-    name: things-kong-service
-    enabled: true
-    services:
-      -
-        name: vechr-microservice-things-service
-        path: /api/v2/things
-        port: 3001
-      -
-        name: vechr-microservice-things-service
-        path: /api/v1/things
-        port: 3001
-      -
-        name: vechr-microservice-things-service
-        path: /api/things
-        port: 3001
-  -
-    name: web-app-kong
-    enabled: true
-    services:
-      -
-        name: vechr-frontend-web-app
-        path: /
-        port: 80
+    secretName: kong-vechr-cert-dev
+    hosts: 
+      - app.vechr.com
+    ca: LS0tLS1CRUd......
+    cert: LS0tLS1CRUdJTiB......
+    key: LS0tLS1CRUd.....
+  
+  rules:
+    -
+      host: app.vechr.com
+      services:
+        -
+          name: vechr-microservice-audit-service
+          path: /api/v2/audit
+          port: 3004
+        -
+          name: vechr-microservice-audit-service
+          path: /api/v1/audit
+          port: 3004
+        -
+          name: vechr-microservice-audit-service
+          path: /api/audit
+          port: 3004
+    -
+      host: app.vechr.com
+      services:
+        -
+          name: vechr-microservice-auth-service
+          path: /api/v2/auth
+          port: 3005
+        -
+          name: vechr-microservice-auth-service
+          path: /api/v1/auth
+          port: 3005
+        -
+          name: vechr-microservice-auth-service
+          path: /api/auth
+          port: 3005
+    -
+      host: app.vechr.com
+      services:
+        -
+          name: vechr-microservice-notification-service
+          path: /api/v2/notification
+          port: 3002
+        -
+          name: vechr-microservice-notification-service
+          path: /api/v1/notification
+          port: 3002
+        -
+          name: vechr-microservice-notification-service
+          path: /api/notification
+          port: 3002
+    - 
+      host: app.vechr.com
+      services:
+        -
+          name: vechr-microservice-things-service
+          path: /api/v2/things
+          port: 3001
+        -
+          name: vechr-microservice-things-service
+          path: /api/v1/things
+          port: 3001
+        -
+          name: vechr-microservice-things-service
+          path: /api/things
+          port: 3001
+    -
+      host: app.vechr.com
+      services:
+        -
+          name: vechr-frontend-web-app
+          path: /
+          port: 80
 ```
 
 ### Common Application
@@ -198,7 +208,7 @@ microservices:
       - name: APP_PORT
         value: "3000"
       - name: NATS_URL
-        value: "nats://vechr-nats.default.svc.cluster.local:4222"
+        value: "nats://nats-lb.default.svc.cluster.local:4222"
       - name: JWT_SECRET
         value: "secretvechr"
       - name: ECRYPTED_SECRET
@@ -240,7 +250,7 @@ microservices:
       - name: APP_PORT
         value: "3000"
       - name: NATS_URL
-        value: "nats://vechr-nats.default.svc.cluster.local:4222"
+        value: "nats://nats-lb.default.svc.cluster.local:4222"
       - name: JWT_SECRET
         value: "secretvechr"
       - name: ECRYPTED_SECRET
@@ -288,7 +298,7 @@ microservices:
       - name: APP_PORT
         value: "3000"
       - name: NATS_URL
-        value: "nats://vechr-nats.default.svc.cluster.local:4222"
+        value: "nats://nats-lb.default.svc.cluster.local:4222"
       - name: JWT_SECRET
         value: "secretvechr"
       - name: ECRYPTED_SECRET
@@ -336,7 +346,7 @@ microservices:
       - name: APP_PORT
         value: "3000"
       - name: NATS_URL
-        value: "nats://vechr-nats.default.svc.cluster.local:4222"
+        value: "nats://nats-lb.default.svc.cluster.local:4222"
       - name: JWT_SECRET
         value: "secretvechr"
       - name: ECRYPTED_SECRET
@@ -386,7 +396,7 @@ microservices:
       - name: APP_PORT
         value: "3000"
       - name: NATS_URL
-        value: "nats://vechr-nats.default.svc.cluster.local:4222"
+        value: "nats://nats-lb.default.svc.cluster.local:4222"
       - name: JWT_SECRET
         value: "secretvechr"
       - name: ECRYPTED_SECRET
@@ -414,43 +424,80 @@ microservices:
       minReplicas: 1
       maxReplicas: 2
       averageUtilization: 70
-
+  
 ```
 
 ## NATS
+For Secret TLS Configuration
+```yaml
+natsSecret:
+  enabled: true
+  secretName: nats-vechr-cert-dev
+  ca: LS0tLS1CRUdJTi.....
+  cert: LS0tLS1CRUdJTiBDR.....
+  key: LS0tLS1CRUdJTiBQU.....
+
+```
 You can refer to the documentation for Configuration [NATS](https://artifacthub.io/packages/helm/nats/nats)
 ```yaml
 nats:
   enabled: true
+
   cluster:
     enabled: true
     replicas: 3
     noAdvertise: true
 
+    tls:
+      secret:
+        name: nats-vechr-cert-dev
+      ca: "ca.crt"
+      cert: "tls.crt"
+      key: "tls.key"
   nats:
-    image: nats:alpine
     jetstream:
       enabled: true
+      connectRetries: 30
 
       memStorage:
         enabled: true
-        size: 2Gi
+        size: "2Gi"
 
       fileStorage:
-        enabled: true
-        size: 1Gi
-        storageDirectory: /data/
+        enabled: false
+        # storageDirectory: /data/
+        # existingClaim: nats-js-disk
+        # claimStorageSize: 3Gi
 
   mqtt:
     enabled: true
     port: 1883
 
+    tls:
+      secret:
+        name: nats-vechr-cert-dev
+      ca: "ca.crt"
+      cert: "tls.crt"
+      key: "tls.key"
+
   websocket:
     enabled: true
     port: 9090
+    noTLS: false
+
+    tls:
+      secret:
+        name: nats-vechr-cert-dev
+      ca: "ca.crt"
+      cert: "tls.crt"
+      key: "tls.key"
+
+    sameOrigin: false
+    allowedOrigins: []
 
   natsbox:
     enabled: true
+
 ```
 
 ## API Gateway (KONG)
@@ -494,22 +541,4 @@ kong:
       # Additional listen parameters, e.g. "reuseport", "backlog=16384"
       parameters:
       - http2
-
-    # Kong admin ingress settings. Useful if you want to expose the Admin
-    # API of Kong outside the k8s cluster.
-    ingress:
-      # Enable/disable exposure using ingress.
-      enabled: false
-      ingressClassName:
-      # TLS secret name.
-      # tls: kong-admin.example.com-tls
-      # Ingress hostname
-      hostname:
-      # Map of ingress annotations.
-      annotations: {}
-      # Ingress path.
-      path: /
-      # Each path in an Ingress is required to have a corresponding path type. (ImplementationSpecific/Exact/Prefix)
-      pathType: ImplementationSpecific
-
 ```

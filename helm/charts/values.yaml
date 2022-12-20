@@ -172,7 +172,6 @@ common:
       username: admin
       password: isnaen1998
 
-      
 ######################################################### Config for Microservices ########################################################
 microservices:
   -
@@ -405,8 +404,7 @@ microservices:
       minReplicas: 1
       maxReplicas: 2
       averageUtilization: 70
-
-      
+  
 ############################################################# Config for NATS #############################################################
 natsSecret:
   enabled: true
@@ -417,6 +415,7 @@ natsSecret:
 
 nats:
   enabled: true
+
   cluster:
     enabled: true
     replicas: 3
@@ -431,16 +430,17 @@ nats:
   nats:
     jetstream:
       enabled: true
+      connectRetries: 30
 
       memStorage:
         enabled: true
         size: "2Gi"
 
       fileStorage:
-        enabled: true
-        size: "1Gi"
-        storageDirectory: /data/
-        storageClassName: default
+        enabled: false
+        # storageDirectory: /data/
+        # existingClaim: nats-js-disk
+        # claimStorageSize: 3Gi
 
   mqtt:
     enabled: true
@@ -470,7 +470,6 @@ nats:
 
   natsbox:
     enabled: true
-
 
 ############################################################# Config for KONG #############################################################
 kong:
