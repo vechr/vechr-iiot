@@ -7,7 +7,7 @@ spec:
   project: vechr
   source:
     repoURL: 'https://vechr.github.io/vechr-atlas/helm/charts/'
-    targetRevision: 1.0.6
+    targetRevision: 1.0.7
     chart: vechr
   destination:
     namespace: default
