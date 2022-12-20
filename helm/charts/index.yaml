@@ -3,6 +3,34 @@ entries:
   vechr:
   - apiVersion: v2
     appVersion: 1.0.1
+    created: "2022-12-20T14:20:57.32288427Z"
+    dependencies:
+    - condition: nats.enabled
+      name: nats
+      repository: https://nats-io.github.io/k8s/helm/charts/
+      version: 0.18.3
+    - condition: kong.enabled
+      name: kong
+      repository: https://charts.konghq.com
+      version: 2.12.0
+    description: Helm Chart for Vechr Kubernetes
+    digest: 9b241873bf81ccf8861d88383fc6b71fcb5fe151a14948df6adc59ce907a66d4
+    home: https://github.com/vechr
+    icon: https://raw.githubusercontent.com/vechr/vechr-atlas/master/images/logo.svg
+    keywords:
+    - Vechr
+    - IoT
+    maintainers:
+    - email: isnaen70@gmail.com
+      name: zulfikar
+      url: https://github.com/zulfikar4568
+    name: vechr
+    type: application
+    urls:
+    - https://github.com/vechr/vechr-atlas/releases/download/vechr-1.0.9/vechr-1.0.9.tgz
+    version: 1.0.9
+  - apiVersion: v2
+    appVersion: 1.0.1
     created: "2022-12-20T11:55:11.082321653Z"
     dependencies:
     - condition: nats.enabled
@@ -224,4 +252,4 @@ entries:
     urls:
     - https://github.com/vechr/vechr-atlas/releases/download/vechr-1.0.0/vechr-1.0.0.tgz
     version: 1.0.0
-generated: "2022-12-20T11:55:11.082358953Z"
+generated: "2022-12-20T14:20:57.323062572Z"
