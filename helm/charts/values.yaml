@@ -415,6 +415,12 @@ natsSecret:
 
 nats:
   enabled: true
+  tls:
+    secret:
+      name: nats-vechr-cert-dev
+    ca: "ca.crt"
+    cert: "tls.crt"
+    key: "tls.key"
 
   cluster:
     enabled: true
@@ -510,3 +516,7 @@ kong:
       # Additional listen parameters, e.g. "reuseport", "backlog=16384"
       parameters:
       - http2
+
+###################################################### Config for Metrics Server ###########################################################
+metricsServer:
+  enabled: true

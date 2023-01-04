@@ -7,8 +7,12 @@ spec:
   project: vechr
   source:
     repoURL: 'https://vechr.github.io/vechr-atlas/helm/charts/'
-    targetRevision: 1.0.9
+    targetRevision: 1.0.10
     chart: vechr
   destination:
     namespace: default
     server: 'https://kubernetes.default.svc'
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
