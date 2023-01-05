@@ -103,49 +103,13 @@ ingresses:
 common:
   postgres:
     - 
-      name: "audit-db"
-      externalPort: 5436
+      name: "vechr"
+      externalPort: 5432
       enabled: true
 
       env:
         - name: POSTGRES_DB
-          value: "audit_db"
-        - name: POSTGRES_USER
-          value: Vechr
-        - name: POSTGRES_PASSWORD
-          value: "123"
-    - 
-      name: "auth-db"
-      externalPort: 5435
-      enabled: true
-
-      env:
-        - name: POSTGRES_DB
-          value: "auth_db"
-        - name: POSTGRES_USER
-          value: Vechr
-        - name: POSTGRES_PASSWORD
-          value: "123"
-    - 
-      name: "notification-db"
-      externalPort: 5434
-      enabled: true
-
-      env:
-        - name: POSTGRES_DB
-          value: "notification_db"
-        - name: POSTGRES_USER
-          value: Vechr
-        - name: POSTGRES_PASSWORD
-          value: "123"
-    - 
-      name: "things-db"
-      externalPort: 5433
-      enabled: true
-
-      env:
-        - name: POSTGRES_DB
-          value: "things_db"
+          value: "postgres"
         - name: POSTGRES_USER
           value: Vechr
         - name: POSTGRES_PASSWORD
@@ -216,7 +180,7 @@ microservices:
       - name: JWT_EXPIRES_IN
         value: "3d"
       - name: DB_URL
-        value: "postgresql://Vechr:123@vechr-postgres-audit-db.default.svc.cluster.local:5436/audit_db?schema=public&connect_timeout=300"
+        value: "postgresql://Vechr:123@vechr-postgres-vechr.default.svc.cluster.local:5432/audit_db?schema=public&connect_timeout=300"
 
     # this will expose port 80 on the host on port 8080
     port: 3000
@@ -258,7 +222,7 @@ microservices:
       - name: JWT_EXPIRES_IN
         value: "3d"
       - name: DB_URL
-        value: "postgresql://Vechr:123@vechr-postgres-auth-db.default.svc.cluster.local:5435/auth_db?schema=public&connect_timeout=300"
+        value: "postgresql://Vechr:123@vechr-postgres-vechr.default.svc.cluster.local:5432/auth_db?schema=public&connect_timeout=300"
       - name: JWT_REFRESH_EXPIRES_IN
         value: "30d"
       - name: INITIAL_SITE
@@ -362,7 +326,7 @@ microservices:
       - name: EMAIL_PORT
         value: "587"
       - name: DB_URL
-        value: "postgresql://Vechr:123@vechr-postgres-notification-db.default.svc.cluster.local:5434/notification_db?schema=public&connect_timeout=300"
+        value: "postgresql://Vechr:123@vechr-postgres-vechr.default.svc.cluster.local:5432/notification_db?schema=public&connect_timeout=300"
 
     # this will expose port 3000 on the host on port 3002
     port: 3000
@@ -404,7 +368,7 @@ microservices:
       - name: JWT_EXPIRES_IN
         value: "3d"
       - name: DB_URL
-        value: "postgresql://Vechr:123@vechr-postgres-things-db.default.svc.cluster.local:5433/things_db?schema=public&connect_timeout=300"
+        value: "postgresql://Vechr:123@vechr-postgres-vechr.default.svc.cluster.local:5432/things_db?schema=public&connect_timeout=300"
 
     # this will expose port 3000 on the host on port 3002
     port: 3000
@@ -541,4 +505,24 @@ kong:
       # Additional listen parameters, e.g. "reuseport", "backlog=16384"
       parameters:
       - http2
+```
+
+## Metric Server
+```yaml
+metricsServer:
+  enabled: false
+```
+
+## Postgresql Bitnami
+You can refer to the documentation for Configuration [POSTGRESQL BITNAMI](https://artifacthub.io/packages/helm/bitnami/postgresql)
+```yaml
+postgresql:
+  enabled: false
+  auth:
+    postgresPassword: "vechr123"
+    username: "vechrUser"
+    password: "vechr123"
+  
+  containerPorts:
+    postgresql: 5432
 ```

@@ -85,19 +85,20 @@ ingresses:
         
 ############################################################ Config for Common ############################################################
 common:
+  # You can use custom kubernetes postgres here, or you can use postgresql (using bitnami postgresql)
   postgres:
-    - 
-      name: "vechr"
-      externalPort: 5432
-      enabled: true
+    # - 
+    #   name: "vechr"
+    #   externalPort: 5432
+    #   enabled: true
 
-      env:
-        - name: POSTGRES_DB
-          value: "postgres"
-        - name: POSTGRES_USER
-          value: Vechr
-        - name: POSTGRES_PASSWORD
-          value: "123"
+    #   env:
+    #     - name: POSTGRES_DB
+    #       value: "postgres"
+    #     - name: POSTGRES_USER
+    #       value: Vechr
+    #     - name: POSTGRES_PASSWORD
+    #       value: "123"
 
   frontend:
     name: web-app
@@ -160,7 +161,7 @@ microservices:
       - name: JWT_EXPIRES_IN
         value: "3d"
       - name: DB_URL
-        value: "postgresql://Vechr:123@vechr-postgres-vechr.default.svc.cluster.local:5432/audit_db?schema=public&connect_timeout=300"
+        value: "postgresql://vechrUser:vechr123@vechr-production-postgresql.default.svc.cluster.local:5432/audit_db?schema=public&connect_timeout=300"
 
     # this will expose port 80 on the host on port 8080
     port: 3000
@@ -202,7 +203,7 @@ microservices:
       - name: JWT_EXPIRES_IN
         value: "3d"
       - name: DB_URL
-        value: "postgresql://Vechr:123@vechr-postgres-vechr.default.svc.cluster.local:5432/auth_db?schema=public&connect_timeout=300"
+        value: "postgresql://vechrUser:vechr123@vechr-production-postgresql.default.svc.cluster.local:5432/auth_db?schema=public&connect_timeout=300"
       - name: JWT_REFRESH_EXPIRES_IN
         value: "30d"
       - name: INITIAL_SITE
@@ -306,7 +307,7 @@ microservices:
       - name: EMAIL_PORT
         value: "587"
       - name: DB_URL
-        value: "postgresql://Vechr:123@vechr-postgres-vechr.default.svc.cluster.local:5432/notification_db?schema=public&connect_timeout=300"
+        value: "postgresql://vechrUser:vechr123@vechr-production-postgresql.default.svc.cluster.local:5432/notification_db?schema=public&connect_timeout=300"
 
     # this will expose port 3000 on the host on port 3002
     port: 3000
@@ -348,7 +349,7 @@ microservices:
       - name: JWT_EXPIRES_IN
         value: "3d"
       - name: DB_URL
-        value: "postgresql://Vechr:123@vechr-postgres-vechr.default.svc.cluster.local:5432/things_db?schema=public&connect_timeout=300"
+        value: "postgresql://vechrUser:vechr123@vechr-production-postgresql.default.svc.cluster.local:5432/things_db?schema=public&connect_timeout=300"
 
     # this will expose port 3000 on the host on port 3002
     port: 3000
@@ -379,12 +380,6 @@ natsSecret:
 
 nats:
   enabled: true
-  tls:
-    secret:
-      name: nats-vechr-cert-dev
-    ca: "ca.crt"
-    cert: "tls.crt"
-    key: "tls.key"
 
   cluster:
     enabled: true
@@ -397,6 +392,7 @@ nats:
       ca: "ca.crt"
       cert: "tls.crt"
       key: "tls.key"
+
   nats:
     jetstream:
       enabled: true
@@ -411,6 +407,13 @@ nats:
         # storageDirectory: /data/
         # existingClaim: nats-js-disk
         # claimStorageSize: 3Gi
+
+      tls:
+        secret:
+          name: nats-vechr-cert-dev
+        ca: "ca.crt"
+        cert: "tls.crt"
+        key: "tls.key"
 
   mqtt:
     enabled: true
@@ -483,4 +486,15 @@ kong:
 
 ###################################################### Config for Metrics Server ###########################################################
 metricsServer:
+  enabled: false
+
+################################################## Config for Postgresql (Bitnami) #########################################################
+postgresql:
   enabled: true
+  auth:
+    postgresPassword: "vechr123"
+    username: "vechrUser"
+    password: "vechr123"
+  
+  containerPorts:
+    postgresql: 5432
