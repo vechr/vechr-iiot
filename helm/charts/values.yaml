@@ -139,7 +139,7 @@ common:
     name: web-app
     image: zulfikar4568/web-app
     tag: latest
-    enabled: true
+    enabled: false
 
     # imagePullPolicy: Always is recommended when using latest tags. Otherwise, please use IfNotPresent
     imagePullPolicy: Always
@@ -196,7 +196,7 @@ microservices:
       - name: JWT_EXPIRES_IN
         value: "3d"
       - name: DB_URL
-        value: "postgresql://Vechr:123@vechr-postgres-audit-db.default.svc.cluster.local:5436/audit_db?schema=public&connect_timeout=300"
+        value: "postgresql://postgres:ZhmMVPQ3uR@vechr-production-postgresql-ha-postgresql.default.svc.cluster.local:5432/audit_db?schema=public&connect_timeout=300"
 
     # this will expose port 80 on the host on port 8080
     port: 3000
@@ -238,7 +238,7 @@ microservices:
       - name: JWT_EXPIRES_IN
         value: "3d"
       - name: DB_URL
-        value: "postgresql://Vechr:123@vechr-postgres-auth-db.default.svc.cluster.local:5435/auth_db?schema=public&connect_timeout=300"
+        value: "postgresql://postgres:ZhmMVPQ3uR@vechr-production-postgresql-ha-postgresql.default.svc.cluster.local:5432/auth_db?schema=public&connect_timeout=300"
       - name: JWT_REFRESH_EXPIRES_IN
         value: "30d"
       - name: INITIAL_SITE
@@ -342,7 +342,7 @@ microservices:
       - name: EMAIL_PORT
         value: "587"
       - name: DB_URL
-        value: "postgresql://Vechr:123@vechr-postgres-notification-db.default.svc.cluster.local:5434/notification_db?schema=public&connect_timeout=300"
+        value: "postgresql://postgres:ZhmMVPQ3uR@vechr-production-postgresql-ha-postgresql.default.svc.cluster.local:5432/notification_db?schema=public&connect_timeout=300"
 
     # this will expose port 3000 on the host on port 3002
     port: 3000
@@ -384,7 +384,7 @@ microservices:
       - name: JWT_EXPIRES_IN
         value: "3d"
       - name: DB_URL
-        value: "postgresql://Vechr:123@vechr-postgres-things-db.default.svc.cluster.local:5433/things_db?schema=public&connect_timeout=300"
+        value: "postgresql://postgres:ZhmMVPQ3uR@vechr-production-postgresql-ha-postgresql.default.svc.cluster.local:5432/things_db?schema=public&connect_timeout=300"
 
     # this will expose port 3000 on the host on port 3002
     port: 3000
@@ -520,3 +520,32 @@ kong:
 ###################################################### Config for Metrics Server ###########################################################
 metricsServer:
   enabled: true
+
+postgresqlha:
+  enabled: true
+  secret:
+    pgpool:
+      name: "pg-pool-secret"
+      adminPassword: "vechr123"
+    postgresql:
+      name: "postgresql-secret"
+      repmgrPassword: "vechr123"
+      password: "vechr123"
+
+  postgresql:
+    existingSecret: "postgresql-secret"
+
+    livenessProbe:
+      failureThreshold: 10
+      initialDelaySeconds: 120
+      periodSeconds: 60
+    readinessProbe:
+      failureThreshold: 10
+      initialDelaySeconds: 120
+      periodSeconds: 60
+
+  pgpool:
+    existingSecret: "pg-pool-secret"
+
+  containerPorts:
+    postgresql: 5432
