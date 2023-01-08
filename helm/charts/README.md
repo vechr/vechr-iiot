@@ -17,21 +17,21 @@ ingresses:
   name: vechr-ingress
   enabled: true
   namespace: default
-  ingressClassName: kong
+  ingressClassName: nginx
 
   tls:
     enabled: true
-    secretName: kong-vechr-cert-dev
+    secretName: kong-vechr-cert-dev #if you using development
     hosts: 
       - app.vechr.com
-    ca: LS0tLS1CRUd......
-    cert: LS0tLS1CRUdJTiB......
-    key: LS0tLS1CRUd.....
+    ca: LS0tLS1CRUdJ.....
+    key: LS0tLS1CRUdJ.....
   
   rules:
     -
       host: app.vechr.com
       services:
+        # backend audit
         -
           name: vechr-microservice-audit-service
           path: /api/v2/audit
@@ -44,9 +44,7 @@ ingresses:
           name: vechr-microservice-audit-service
           path: /api/audit
           port: 3004
-    -
-      host: app.vechr.com
-      services:
+        # backend auth
         -
           name: vechr-microservice-auth-service
           path: /api/v2/auth
@@ -59,9 +57,7 @@ ingresses:
           name: vechr-microservice-auth-service
           path: /api/auth
           port: 3005
-    -
-      host: app.vechr.com
-      services:
+        # backend notification
         -
           name: vechr-microservice-notification-service
           path: /api/v2/notification
@@ -74,9 +70,7 @@ ingresses:
           name: vechr-microservice-notification-service
           path: /api/notification
           port: 3002
-    - 
-      host: app.vechr.com
-      services:
+        # backend things
         -
           name: vechr-microservice-things-service
           path: /api/v2/things
@@ -89,9 +83,7 @@ ingresses:
           name: vechr-microservice-things-service
           path: /api/things
           port: 3001
-    -
-      host: app.vechr.com
-      services:
+        # frontend
         -
           name: vechr-frontend-web-app
           path: /
@@ -525,4 +517,10 @@ postgresql:
   
   containerPorts:
     postgresql: 5432
+```
+
+## Nginx Ingress
+```yaml
+nginx:
+  enabled: true
 ```

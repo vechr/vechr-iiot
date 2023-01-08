@@ -3,11 +3,11 @@ ingresses:
   name: vechr-ingress
   enabled: true
   namespace: default
-  ingressClassName: kong
+  ingressClassName: nginx
 
   tls:
     enabled: true
-    secretName: kong-vechr-cert-dev
+    secretName: kong-vechr-cert-dev #if you using development
     hosts: 
       - app.vechr.com
     ca: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUVIekNDQXdlZ0F3SUJBZ0lVWWZsYWh1RFkrTXhSVndVb3NIU2hORzNsM3M4d0RRWUpLb1pJaHZjTkFRRUwKQlFBd2daNHhDekFKQmdOVkJBWVRBa2xFTVJNd0VRWURWUVFJREFwS1lYZGhJRUpoY21GME1ROHdEUVlEVlFRSApEQVpEYVcxaGFHa3hFVEFQQmdOVkJBb01DRlpsWTJoeUlFTkJNUjR3SEFZRFZRUUxEQlZEWlhKMGFXWnBZMkYwClpTQkJkWFJvYjNKcGRIa3hGakFVQmdOVkJBTU1EV0Z3Y0M1MlpXTm9jaTVqYjIweEhqQWNCZ2txaGtpRzl3MEIKQ1FFV0QyRmtiV2x1UUhabFkyaHlMbU52YlRBZUZ3MHlNakV5TVRFeE56SXdNelZhRncweU56RXlNVEF4TnpJdwpNelZhTUlHZU1Rc3dDUVlEVlFRR0V3SkpSREVUTUJFR0ExVUVDQXdLU21GM1lTQkNZWEpoZERFUE1BMEdBMVVFCkJ3d0dRMmx0WVdocE1SRXdEd1lEVlFRS0RBaFdaV05vY2lCRFFURWVNQndHQTFVRUN3d1ZRMlZ5ZEdsbWFXTmgKZEdVZ1FYVjBhRzl5YVhSNU1SWXdGQVlEVlFRRERBMWhjSEF1ZG1WamFISXVZMjl0TVI0d0hBWUpLb1pJaHZjTgpBUWtCRmc5aFpHMXBia0IyWldOb2NpNWpiMjB3Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUURIZjJlSkp4bG03b1hqaUNKZFdvT3dydlRGQkJtRHd5RUgyQlFlZExHck1GRThTZEFkT2EwcHk0UCsKYnZlTUxMWHF4ZDMvTFN3Y3FkcU1QZHNUSytYdWJacjJEeGlWa2FJVzlTMEw4aHlPekNaR0s4eTZFRVVRVDBPYwo5YkRsTHUyaStFZHNYUVZrWVlndjJnaVE3WjNTNTNxSHN4S3o0ZjFIRjl2N2ZsZDZYVXVFTm5Eak9relRvSTRFCmRSTUtId3FxM1lJOUJXdUY2VVQ1N1NqdFFMNGhBWWhER3F2VHRHUE1DWm1HZ2V6OS9ieFU0dVk0d053bm1tRysKdjFDNkJSRnFaandEOFlzbmRRd2ZkV0RKTVJ0dFRueDkyUGpSVkxBWThCd3Vuams4MXByR2JlUW5kNjJEMldPSwpFbGtlUG4zc2xCSlFKc1RzcVFnV3hDY0M0RE1wQWdNQkFBR2pVekJSTUIwR0ExVWREZ1FXQkJUUjJKN1Q1d21nCnhVRmdMSmZ3V1BndldzQ1BQREFmQmdOVkhTTUVHREFXZ0JUUjJKN1Q1d21neFVGZ0xKZndXUGd2V3NDUFBEQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQTBHQ1NxR1NJYjNEUUVCQ3dVQUE0SUJBUUJzUENTcTFlODdUbERhRGJzaApvbDJJY2s2c05tOWwxL1NMcmxWdUxsVU1NcmlQL3YxZmorYTAvV3MyS2ZXaXYzWFJtbGg2aHptNFFSdmN2a3N0CmpNb1A2NitzWU1EZ2kyUUZWamQ4ZzZuZkpiMXkzL2o4dFVLZFc1N3g2QTVwNlpNY3FubWFKWElSWjJ2VUlNMmoKdk5Qa0s3OWFxMUJJSEZBeVVLMksvenlkUjBvY21GL2F5dE41K2xnM0FtWXhtWHE3RGZRU0Z5L3ZOSHZZU3dCaQpxV3U5c0VFQUk1aG5yc0Q2SDFsWnczVFBLd2dxK0JMM0RIS0pLbmM5clpkc3FMMHBSODFEaFo3U2E1R2p2TGRPCmtUeWdyTmpYSU5QZ3RUQzFpTURnUjFxU3hlMXBscTllVWZpZU4yZ0pDL2R1VDZSMU1sc244Sm1YaHVFQXJ6QzcKbndjUAotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
@@ -18,6 +18,7 @@ ingresses:
     -
       host: app.vechr.com
       services:
+        # backend audit
         -
           name: vechr-microservice-audit-service
           path: /api/v2/audit
@@ -30,9 +31,7 @@ ingresses:
           name: vechr-microservice-audit-service
           path: /api/audit
           port: 3004
-    -
-      host: app.vechr.com
-      services:
+        # backend auth
         -
           name: vechr-microservice-auth-service
           path: /api/v2/auth
@@ -45,9 +44,7 @@ ingresses:
           name: vechr-microservice-auth-service
           path: /api/auth
           port: 3005
-    -
-      host: app.vechr.com
-      services:
+        # backend notification
         -
           name: vechr-microservice-notification-service
           path: /api/v2/notification
@@ -60,9 +57,7 @@ ingresses:
           name: vechr-microservice-notification-service
           path: /api/notification
           port: 3002
-    - 
-      host: app.vechr.com
-      services:
+        # backend things
         -
           name: vechr-microservice-things-service
           path: /api/v2/things
@@ -75,9 +70,7 @@ ingresses:
           name: vechr-microservice-things-service
           path: /api/things
           port: 3001
-    -
-      host: app.vechr.com
-      services:
+        # frontend
         -
           name: vechr-frontend-web-app
           path: /
@@ -444,45 +437,9 @@ nats:
   natsbox:
     enabled: true
 
-############################################################# Config for KONG #############################################################
-kong:
+############################################################# Config for NGINX #############################################################
+nginx:
   enabled: true
-  admin:
-    # Enable creating a Kubernetes service for the admin API
-    # Disabling this is recommended for most ingress controller configurations
-    # Enterprise users that wish to use Kong Manager with the controller should enable this
-    enabled: true
-    type: NodePort
-    # To specify annotations or labels for the admin service, add them to the respective
-    # "annotations" or "labels" dictionaries below.
-    annotations: {}
-    #  service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
-    labels: {}
-
-    http:
-      # Enable plaintext HTTP listen for the admin API
-      # Disabling this and using a TLS listen only is recommended for most configuration
-      enabled: true
-      servicePort: 8001
-      containerPort: 8001
-      # Set a nodePort which is available if service type is NodePort
-      # nodePort: 32080
-      # Additional listen parameters, e.g. "reuseport", "backlog=16384"
-      parameters: []
-
-    tls:
-      # Enable HTTPS listen for the admin API
-      enabled: true
-      servicePort: 8444
-      containerPort: 8444
-      # Set a target port for the TLS port in the admin API service, useful when using TLS
-      # termination on an ELB.
-      # overrideServiceTargetPort: 8000
-      # Set a nodePort which is available if service type is NodePort
-      # nodePort: 32443
-      # Additional listen parameters, e.g. "reuseport", "backlog=16384"
-      parameters:
-      - http2
 
 ###################################################### Config for Metrics Server ###########################################################
 metricsServer:
