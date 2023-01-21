@@ -4,23 +4,39 @@ Vechr app is application IIoT for manufacturing, and running on kubernetes Clust
 
 ## TL;DR;
 ```bash
+# Install Cert Manager first (if needed)
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+helm install \
+  cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --create-namespace \
+  --version v1.11.0 \
+  --set installCRDs=true
+
+# Install vechr
 helm repo add vechr https://vechr.github.io/vechr-atlas/helm/charts/
 helm repo update
-helm install vechr vechr/vechr
+helm install vechr vechr/vechr-production
 ```
 
 ## Create GKE Clusters
 ```bash
+# Create Cluster Autopilot
 gcloud container clusters create-auto vechr-cluster --zone=asia-southeast2-a
-
 gcloud container clusters get-credentials vechr-cluster --zone asia-southeast2-a
-
 kubectl get nodes -o wide
 
+# Example create address static for ingress in GKE
 gcloud compute addresses create vechr-ip --global
-
+gcloud compute addresses create vechr-nats-ip --global
+# After this add in your Domain
 gcloud compute addresses describe vechr-ip --format='value(address)' --global
 
+# Put this in gke.nats.loadBalanceIP
+gcloud compute addresses describe vechr-nats-ip --format='value(address)' --global
+
+# Clean Up
 gcloud container clusters delete vechr-cluster --zone asia-southeast2-a
 gcloud compute addresses delete vechr-ip --global
 ```
