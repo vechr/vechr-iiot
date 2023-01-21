@@ -33,9 +33,3 @@ dependencies:
     version: 12.1.6
     repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enabled
-    
-  - name: cert-manager
-    version: v1.11.0
-    repository: https://charts.jetstack.io
-    alias: certmanager
-    condition: certmanager.enabled

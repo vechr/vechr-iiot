@@ -463,9 +463,7 @@ postgresql:
     postgresql: 5432
 
 ######################################################## Config for CERT MANAGER ###########################################################
-certmanager: #defined by either the name or alias of your dependency in Chart.yaml
-  namespace: cert-manager
-
+certmanager:
   # Will Override TLS Ingresses in above configuration
   ingressTLS:
     enabled: false
