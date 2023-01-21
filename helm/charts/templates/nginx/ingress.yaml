@@ -7,8 +7,28 @@ metadata:
   namespace:  {{.Values.ingresses.namespace}}
   annotations:
     kubernetes.io/ingress.class: {{.Values.ingresses.ingressClassName}}
+    {{if .Values.ingresses.gke.enabled}}
+    # This tells Google Cloud to create an External Load Balancer to realize this Ingress
+    kubernetes.io/ingress.class: {{.Values.ingresses.gke.class}}
+    # This enables HTTP connections from Internet clients
+    kubernetes.io/ingress.allow-http: "true"
+    # This tells Google Cloud to associate the External Load Balancer with the static IP which we created earlier
+    kubernetes.io/ingress.global-static-ip-name: {{.Values.ingresses.gke.staticIP}}
+    {{if .Values.ingresses.gke.tls.enabled}}
+    cert-manager.io/issuer: {{ .Values.ingresses.gke.tls.issuer.name }}
+    {{end}}
+    {{end}}
 spec:
-  {{if .Values.ingresses.tls.enabled}}
+  {{if and (eq .Values.ingresses.gke.tls.enabled true) (eq .Values.ingresses.tls.enabled false)}}
+  tls:
+  - secretName: {{ .Values.ingresses.gke.tls.name }}
+    hosts:
+      {{if .Values.ingresses.gke.tls.hosts}}
+      {{range $i, $host := .Values.ingresses.gke.tls.hosts}}
+      - {{$host}}
+      {{end}}
+      {{end}}
+  {{else}}
   tls:
   - hosts: 
       {{if .Values.ingresses.tls.hosts}}
