@@ -5,22 +5,6 @@ ingresses:
   namespace: default
   ingressClassName: nginx
 
-  gke:
-    enabled: false
-    # gke class
-    class: gce
-    # Your address static ip
-    staticIP: vechr-ip
-
-    tls:
-      enabled: false
-      issuer:
-        name: letsencrypt-vechr
-        email: admin@vechr.com
-      name: nginx-vechr-cert-prod
-      hosts: 
-      - app.vechr.com
-
   tls:
     enabled: true
     secretName: nginx-vechr-cert-dev #if you using development
@@ -395,6 +379,12 @@ nats:
     replicas: 3
     noAdvertise: true
 
+    # "*.<your release helm name>.<your namespace release>.svc.cluster.local"
+    dnsNames:
+      - "*.vechr-production-nats.default.svc.cluster.local"
+      - "*.vechr-development-nats.default.svc.cluster.local"
+      - "*.vechr-staging-nats.default.svc.cluster.local"
+
     tls:
       secret:
         name: nats-routes-tls
@@ -419,7 +409,7 @@ nats:
 
       tls:
         secret:
-          name: nats-server-tls
+          name: nats-vechr-cert-dev
         ca: "ca.crt"
         cert: "tls.crt"
         key: "tls.key"
@@ -430,7 +420,7 @@ nats:
 
     tls:
       secret:
-        name: nats-server-tls
+        name: nats-vechr-cert-dev
       ca: "ca.crt"
       cert: "tls.crt"
       key: "tls.key"
@@ -442,7 +432,7 @@ nats:
 
     tls:
       secret:
-        name: nats-server-tls
+        name: nats-vechr-cert-dev
       ca: "ca.crt"
       cert: "tls.crt"
       key: "tls.key"
@@ -471,3 +461,30 @@ postgresql:
   
   containerPorts:
     postgresql: 5432
+
+######################################################## Config for CERT MANAGER ###########################################################
+certmanager: #defined by either the name or alias of your dependency in Chart.yaml
+  namespace: cert-manager
+
+  # Will Override TLS Ingresses in above configuration
+  ingressTLS:
+    enabled: false
+    issuer:
+      name: letsencrypt-vechr
+      email: admin@vechr.com
+    name: nginx-vechr-cert-prod
+    hosts: 
+      - app.vechr.com
+
+######################################################## Config for GKE ###########################################################
+gke:
+  enabled: false
+  ingress:
+    # gke class
+    class: gce
+    # Your address static ip
+    staticIP: vechr-ip
+
+  nats:
+    loadBalancerIP: "34.96.78.149"
+  
