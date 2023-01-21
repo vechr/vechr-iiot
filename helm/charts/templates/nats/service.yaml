@@ -19,3 +19,6 @@ spec:
       port: 9090
       targetPort: 9090
       name: websocket
+  {{if .Values.gke.nats.enabled}}
+  loadBalancerIP: {{ .Values.gke.nats.loadBalancerIP }}
+  {{end}}

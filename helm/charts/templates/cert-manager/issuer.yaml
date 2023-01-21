@@ -1,15 +1,15 @@
-{{if .Values.ingresses.gke.tls.enabled}}
+{{if .Values.certmanager.ingressTLS.enabled}}
 ---
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: {{ .Values.ingresses.gke.tls.issuer.name }}
+  name: {{ .Values.certmanager.ingressTLS.issuer.name }}
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: {{ .Values.ingresses.gke.tls.issuer.email }}
+    email: {{ .Values.certmanager.ingressTLS.issuer.email }}
     privateKeySecretRef:
-      name: {{ .Values.ingresses.gke.tls.issuer.name }}
+      name: {{ .Values.certmanager.ingressTLS.issuer.name }}
     solvers:
     - http01:
         ingress:
