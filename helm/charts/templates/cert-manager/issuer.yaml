@@ -1,0 +1,17 @@
+{{if .Values.ingresses.gke.tls.enabled}}
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ .Values.ingresses.gke.tls.issuer.name }}
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: {{ .Values.ingresses.gke.tls.issuer.email }}
+    privateKeySecretRef:
+      name: {{ .Values.ingresses.gke.tls.issuer.name }}
+    solvers:
+    - http01:
+        ingress:
+          name: {{.Values.ingresses.name}}
+{{end}}

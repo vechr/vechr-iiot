@@ -9,6 +9,22 @@ helm repo update
 helm install vechr vechr/vechr
 ```
 
+## Create GKE Clusters
+```bash
+gcloud container clusters create-auto vechr-cluster --zone=asia-southeast2-a
+
+gcloud container clusters get-credentials vechr-cluster --zone asia-southeast2-a
+
+kubectl get nodes -o wide
+
+gcloud compute addresses create vechr-ip --global
+
+gcloud compute addresses describe vechr-ip --format='value(address)' --global
+
+gcloud container clusters delete vechr-cluster --zone asia-southeast2-a
+gcloud compute addresses delete vechr-ip --global
+```
+
 ## Configuration
 
 ### Ingress
@@ -454,49 +470,6 @@ nats:
   natsbox:
     enabled: true
 
-```
-
-## API Gateway (KONG)
-You can refer to [KONG](https://artifacthub.io/packages/helm/kong/kong) for Configuration
-```yaml
-kong:
-  enabled: true
-  admin:
-    # Enable creating a Kubernetes service for the admin API
-    # Disabling this is recommended for most ingress controller configurations
-    # Enterprise users that wish to use Kong Manager with the controller should enable this
-    enabled: true
-    type: NodePort
-    # To specify annotations or labels for the admin service, add them to the respective
-    # "annotations" or "labels" dictionaries below.
-    annotations: {}
-    #  service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
-    labels: {}
-
-    http:
-      # Enable plaintext HTTP listen for the admin API
-      # Disabling this and using a TLS listen only is recommended for most configuration
-      enabled: true
-      servicePort: 8001
-      containerPort: 8001
-      # Set a nodePort which is available if service type is NodePort
-      # nodePort: 32080
-      # Additional listen parameters, e.g. "reuseport", "backlog=16384"
-      parameters: []
-
-    tls:
-      # Enable HTTPS listen for the admin API
-      enabled: true
-      servicePort: 8444
-      containerPort: 8444
-      # Set a target port for the TLS port in the admin API service, useful when using TLS
-      # termination on an ELB.
-      # overrideServiceTargetPort: 8000
-      # Set a nodePort which is available if service type is NodePort
-      # nodePort: 32443
-      # Additional listen parameters, e.g. "reuseport", "backlog=16384"
-      parameters:
-      - http2
 ```
 
 ## Metric Server
