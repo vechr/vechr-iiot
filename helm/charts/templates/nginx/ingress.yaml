@@ -6,7 +6,6 @@ metadata:
   name: {{.Values.ingresses.name}}
   namespace:  {{.Values.ingresses.namespace}}
   annotations:
-    kubernetes.io/ingress.class: {{.Values.ingresses.ingressClassName}}
     {{if .Values.gke.enabled}}
     # This tells Google Cloud to create an External Load Balancer to realize this Ingress
     kubernetes.io/ingress.class: {{.Values.gke.ingress.class}}
@@ -14,6 +13,8 @@ metadata:
     kubernetes.io/ingress.allow-http: "true"
     # This tells Google Cloud to associate the External Load Balancer with the static IP which we created earlier
     kubernetes.io/ingress.global-static-ip-name: {{.Values.gke.ingress.staticIP}}
+    {{else}}
+    kubernetes.io/ingress.class: {{.Values.ingresses.ingressClassName}}
     {{end}}
     # Ingress using Cert Manager Let's Encrypt
     {{if .Values.certmanager.ingressTLS.enabled}}
