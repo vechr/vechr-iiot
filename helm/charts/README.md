@@ -22,19 +22,26 @@ helm install vechr vechr/vechr-production
 
 ## Create GKE Clusters
 ```bash
-# Create Cluster Autopilot
-gcloud container clusters create-auto vechr-cluster --zone=asia-southeast2-a
+# Create Cluster GKE
+gcloud compute machine-types list > machine-types.log
+
+gcloud container get-server-config --zone asia-southeast2-a > asia-southeast2-a-cluster.log
+
+gcloud container clusters create vechr-cluster \
+--cluster-version 1.25.4-gke.2100 \
+--disk-size 200 \
+--num-nodes 1 \
+--machine-type e2-highcpu-4 \
+--zone asia-southeast2-a
+
 gcloud container clusters get-credentials vechr-cluster --zone asia-southeast2-a
+
 kubectl get nodes -o wide
 
 # Example create address static for ingress in GKE
-gcloud compute addresses create vechr-ip --global
-gcloud compute addresses create vechr-nats-ip --global
-# After this add in your Domain
+gcloud compute addresses create vechr-ip --region=asia-southeast2 --subnet=default
+# After this add in your Domain and Put this in gke.nats.loadBalanceIP
 gcloud compute addresses describe vechr-ip --format='value(address)' --global
-
-# Put this in gke.nats.loadBalanceIP
-gcloud compute addresses describe vechr-nats-ip --format='value(address)' --global
 
 # Clean Up
 gcloud container clusters delete vechr-cluster --zone asia-southeast2-a
