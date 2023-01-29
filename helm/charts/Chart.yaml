@@ -43,3 +43,13 @@ dependencies:
     version: 8.5.1
     repository: https://helm.elastic.co
     condition: logstash.enabled
+
+  - name: elasticsearch
+    version: 8.5.1
+    repository: https://helm.elastic.co
+    condition: elasticsearch.enabled
+
+  # - name: kibana
+  #   version: 8.5.1
+  #   repository: https://helm.elastic.co
+  #   condition: kibana.enabled
