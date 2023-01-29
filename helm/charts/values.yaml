@@ -485,4 +485,40 @@ gke:
 
   nats:
     loadBalancerIP: "34.96.78.149"
+
+##################################################### Config for Filebeat #########################################################
+
+filebeat:
+  daemonset:
+    extraEnvs: []
+    filebeatConfig:
+      filebeat.yml: |
+        filebeat.inputs:
+        - type: container
+          paths:
+            - /var/log/containers/*.log
+          processors:
+          - add_kubernetes_metadata:
+              host: ${NODE_NAME}
+              matchers:
+              - logs_path:
+                  logs_path: "/var/log/containers/"
+
+        output.logstash:
+          hosts: ["logstash-logstash:5044"]
+    
+    secretMounts: []
+  deployment:
+    extraEnvs: []
+    filebeatConfig:
+      filebeat.yml: |
+        filebeat.inputs:
+        - type: tcp
+          max_message_size: 10MiB
+          host: "localhost:9000"
+        output.elasticsearch:
+          host: '${NODE_NAME}'
+          hosts: '${ELASTICSEARCH_HOSTS:elasticsearch-master:9200}'
+
+    secretMounts: []
   
