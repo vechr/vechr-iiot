@@ -487,7 +487,6 @@ gke:
     loadBalancerIP: "34.96.78.149"
 
 ##################################################### Config for Filebeat #########################################################
-
 filebeat:
   enabled: true
   daemonset:
@@ -506,8 +505,8 @@ filebeat:
                   logs_path: "/var/log/containers/"
 
         output.logstash:
-          hosts: ["logstash-logstash:5044"]
-    
+          hosts: ["vechr-production-logstash:5044"]
+    # Make sure you change <you release name>-logstash:5044 depend on your helm release name
     secretMounts: []
   deployment:
     extraEnvs: []
@@ -523,6 +522,7 @@ filebeat:
 
     secretMounts: []
 
+##################################################### Config for Logstash #########################################################
 logstash:
   enabled: true
   logstashPipeline:
@@ -547,3 +547,30 @@ logstash:
         port: 8080
         protocol: TCP
         targetPort: 8080
+
+##################################################### Config for ElasticSearch #########################################################
+elasticsearch:
+  enabled: true
+  secret:
+    enabled: false
+    password: "" # generated randomly if not defined
+
+  antiAffinity: "soft"
+
+##################################################### Config for Kibana #########################################################
+# kibana:
+#   enabled: true
+#   ingress:
+#     enabled: true
+#     className: "nginx"
+#     pathtype: ImplementationSpecific
+#     annotations:
+#       kubernetes.io/ingress.class: nginx
+#     hosts:
+#       - host: app.vechr.com
+#         paths:
+#           - path: /
+#     tls:
+#      - secretName: nginx-vechr-cert-dev
+#        hosts:
+#          - app.vechr.com
