@@ -488,9 +488,23 @@ gke:
 
 ##################################################### Config for Filebeat #########################################################
 filebeat:
-  enabled: true
+  enabled: false
+
+  service:
+    name: logstash-service
+    externalName: monitoring.vechr.com
+    ports:
+      - port: 5044
+
   daemonset:
-    extraEnvs: []
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "200Mi"
+      limits:
+        cpu: "500m"
+        memory: "500Mi"
+
     filebeatConfig:
       filebeat.yml: |
         filebeat.inputs:
@@ -505,68 +519,14 @@ filebeat:
                   logs_path: "/var/log/containers/"
 
         output.logstash:
-          hosts: ["vechr-production-logstash:5044"]
+          hosts: ["logstash-service:5044"]
     # Make sure you change <you release name>-logstash:5044 depend on your helm release name
-    secretMounts: []
-  deployment:
-    extraEnvs: []
-    filebeatConfig:
-      filebeat.yml: |
-        filebeat.inputs:
-        - type: tcp
-          max_message_size: 10MiB
-          host: "localhost:9000"
-        output.elasticsearch:
-          host: '${NODE_NAME}'
-          hosts: '${ELASTICSEARCH_HOSTS:elasticsearch-master:9200}'
 
-    secretMounts: []
-
-##################################################### Config for Logstash #########################################################
-logstash:
-  enabled: true
-  logstashPipeline:
-    logstash.conf: |
-      input {
-        beats {
-          port => 5044
-        }
-      }
-      output { elasticsearch { hosts => "https://elasticsearch-master:9200" } }
-  
-  service:
-    annotations: {}
-    type: ClusterIP
-    loadBalancerIP: ""
-    ports:
-      - name: beats
-        port: 5044
-        protocol: TCP
-        targetPort: 5044
-      - name: http
-        port: 8080
-        protocol: TCP
-        targetPort: 8080
-
-##################################################### Config for ElasticSearch #########################################################
-elasticsearch:
-  enabled: true
-  secret:
-    enabled: true
-    password: "" # generated randomly if not defined
-
-  volumeClaimTemplate:
-    accessModes: ["ReadWriteOnce"]
-    resources:
-      requests:
-        storage: 10Gi
-  
-  resources:
-    requests:
-      cpu: "200m"
-      memory: "100Mi"
-    limits:
-      cpu: "500m"
-      memory: "500Mi"
-
-  antiAffinity: "soft"
+##################################################### Config for Service External #########################################################
+serviceExternal:
+  services:
+    - name: gmail-service
+      enabled: true
+      externalName: smtp.gmail.com
+      ports:
+        - port: 587
