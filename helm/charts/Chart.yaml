@@ -38,13 +38,3 @@ dependencies:
     version: 8.5.1
     repository: https://helm.elastic.co
     condition: filebeat.enabled
-
-  - name: logstash
-    version: 8.5.1
-    repository: https://helm.elastic.co
-    condition: logstash.enabled
-
-  - name: elasticsearch
-    version: 8.5.1
-    repository: https://helm.elastic.co
-    condition: elasticsearch.enabled
