@@ -14,3 +14,4 @@ DNS.7 = vechr-production-nats-0.vechr-production-nats.default.svc.cluster.local
 DNS.8 = vechr-production-nats-1.vechr-production-nats.default.svc.cluster.local
 DNS.9 = vechr-production-nats-2.vechr-production-nats.default.svc.cluster.local
 DNS.10 = app.vechr.com
+DNS.11 = nats.vechr.com

@@ -4,8 +4,7 @@ metadata:
   name: nats-lb
   {{if .Values.gke.enabled}}
   annotations:
-    networking.gke.io/load-balancer-type: "Internal"
-    networking.gke.io/internal-load-balancer-allow-global-access: "true"
+    cloud.google.com/l4-rbs: "enabled"
   {{end}}
 spec:
   type: LoadBalancer

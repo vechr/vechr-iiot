@@ -7,7 +7,7 @@ metadata:
   labels:
     app: vechr-frontend-{{ .Values.common.frontend.name }}
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: vechr-frontend-{{ .Values.common.frontend.name }}
   ports:

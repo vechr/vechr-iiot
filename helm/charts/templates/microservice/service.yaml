@@ -9,7 +9,7 @@ metadata:
   labels:
     app: vechr-microservice-{{$value.name}}
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: vechr-microservice-{{$value.name}}
   ports:
