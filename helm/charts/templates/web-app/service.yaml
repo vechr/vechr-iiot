@@ -15,5 +15,6 @@ spec:
       name: http
       port: {{ .Values.common.frontend.externalPort }}
       targetPort:  {{ .Values.common.frontend.port }}
+      nodePort: {{ .Values.common.frontend.nodePort }}
 
 {{end}}

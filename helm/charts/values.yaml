@@ -5,9 +5,10 @@ ingresses:
   namespace: default
   ingressClassName: nginx
 
+  # Will used this TLS if we not enabled cert manager ingress TLS, but you need enabled tls.enabled: true
   tls:
-    enabled: true
-    secretName: nginx-vechr-cert-dev #if you using development
+    enabled: true # enable for tls
+    secretName: nginx-vechr-cert-dev # if you using development
     hosts: 
       - app.vechr.com
     ca: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUVIekNDQXdlZ0F3SUJBZ0lVWWZsYWh1RFkrTXhSVndVb3NIU2hORzNsM3M4d0RRWUpLb1pJaHZjTkFRRUwKQlFBd2daNHhDekFKQmdOVkJBWVRBa2xFTVJNd0VRWURWUVFJREFwS1lYZGhJRUpoY21GME1ROHdEUVlEVlFRSApEQVpEYVcxaGFHa3hFVEFQQmdOVkJBb01DRlpsWTJoeUlFTkJNUjR3SEFZRFZRUUxEQlZEWlhKMGFXWnBZMkYwClpTQkJkWFJvYjNKcGRIa3hGakFVQmdOVkJBTU1EV0Z3Y0M1MlpXTm9jaTVqYjIweEhqQWNCZ2txaGtpRzl3MEIKQ1FFV0QyRmtiV2x1UUhabFkyaHlMbU52YlRBZUZ3MHlNakV5TVRFeE56SXdNelZhRncweU56RXlNVEF4TnpJdwpNelZhTUlHZU1Rc3dDUVlEVlFRR0V3SkpSREVUTUJFR0ExVUVDQXdLU21GM1lTQkNZWEpoZERFUE1BMEdBMVVFCkJ3d0dRMmx0WVdocE1SRXdEd1lEVlFRS0RBaFdaV05vY2lCRFFURWVNQndHQTFVRUN3d1ZRMlZ5ZEdsbWFXTmgKZEdVZ1FYVjBhRzl5YVhSNU1SWXdGQVlEVlFRRERBMWhjSEF1ZG1WamFISXVZMjl0TVI0d0hBWUpLb1pJaHZjTgpBUWtCRmc5aFpHMXBia0IyWldOb2NpNWpiMjB3Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUURIZjJlSkp4bG03b1hqaUNKZFdvT3dydlRGQkJtRHd5RUgyQlFlZExHck1GRThTZEFkT2EwcHk0UCsKYnZlTUxMWHF4ZDMvTFN3Y3FkcU1QZHNUSytYdWJacjJEeGlWa2FJVzlTMEw4aHlPekNaR0s4eTZFRVVRVDBPYwo5YkRsTHUyaStFZHNYUVZrWVlndjJnaVE3WjNTNTNxSHN4S3o0ZjFIRjl2N2ZsZDZYVXVFTm5Eak9relRvSTRFCmRSTUtId3FxM1lJOUJXdUY2VVQ1N1NqdFFMNGhBWWhER3F2VHRHUE1DWm1HZ2V6OS9ieFU0dVk0d053bm1tRysKdjFDNkJSRnFaandEOFlzbmRRd2ZkV0RKTVJ0dFRueDkyUGpSVkxBWThCd3Vuams4MXByR2JlUW5kNjJEMldPSwpFbGtlUG4zc2xCSlFKc1RzcVFnV3hDY0M0RE1wQWdNQkFBR2pVekJSTUIwR0ExVWREZ1FXQkJUUjJKN1Q1d21nCnhVRmdMSmZ3V1BndldzQ1BQREFmQmdOVkhTTUVHREFXZ0JUUjJKN1Q1d21neFVGZ0xKZndXUGd2V3NDUFBEQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQTBHQ1NxR1NJYjNEUUVCQ3dVQUE0SUJBUUJzUENTcTFlODdUbERhRGJzaApvbDJJY2s2c05tOWwxL1NMcmxWdUxsVU1NcmlQL3YxZmorYTAvV3MyS2ZXaXYzWFJtbGg2aHptNFFSdmN2a3N0CmpNb1A2NitzWU1EZ2kyUUZWamQ4ZzZuZkpiMXkzL2o4dFVLZFc1N3g2QTVwNlpNY3FubWFKWElSWjJ2VUlNMmoKdk5Qa0s3OWFxMUJJSEZBeVVLMksvenlkUjBvY21GL2F5dE41K2xnM0FtWXhtWHE3RGZRU0Z5L3ZOSHZZU3dCaQpxV3U5c0VFQUk1aG5yc0Q2SDFsWnczVFBLd2dxK0JMM0RIS0pLbmM5clpkc3FMMHBSODFEaFo3U2E1R2p2TGRPCmtUeWdyTmpYSU5QZ3RUQzFpTURnUjFxU3hlMXBscTllVWZpZU4yZ0pDL2R1VDZSMU1sc244Sm1YaHVFQXJ6QzcKbndjUAotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
@@ -104,6 +105,7 @@ common:
 
     port: 80
     externalPort: 80
+    nodePort: 30035
 
     # Resource
     resources:
@@ -159,6 +161,9 @@ microservices:
     # this will expose port 80 on the host on port 8080
     port: 3000
     externalPort: 3004
+    nodePort: 30036
+    # Path for Health Check, it's must if we used GKE
+    requestPath: /api/audit
 
     # Resource
     resources:
@@ -207,6 +212,9 @@ microservices:
     # this will expose port 3000 on the host on port 3005
     port: 3000
     externalPort: 3005
+    nodePort: 30037
+    # Path for Health Check, it's must if we used GKE
+    requestPath: /api/auth
 
     # Resource
     resources:
@@ -255,6 +263,9 @@ microservices:
     # this will expose port 3000 on the host on port 3003
     port: 3000
     externalPort: 3003
+    nodePort: 30038
+    # Path for Health Check, it's must if we used GKE
+    requestPath:
 
     # Resource
     resources:
@@ -305,6 +316,9 @@ microservices:
     # this will expose port 3000 on the host on port 3002
     port: 3000
     externalPort: 3002
+    nodePort: 30039
+    # Path for Health Check, it's must if we used GKE
+    requestPath: /api/notification
 
     # Resource
     resources:
@@ -347,6 +361,9 @@ microservices:
     # this will expose port 3000 on the host on port 3002
     port: 3000
     externalPort: 3001
+    nodePort: 30040
+    # Path for Health Check, it's must if we used GKE
+    requestPath: /api/things
       
     # Resource
     resources:
@@ -484,7 +501,7 @@ gke:
     staticIP: vechr-iiot-asia-southeast2-prod-ingress-ip
 
   nats:
-    loadBalancerIP: "34.101.95.242"
+    loadBalancerIP: "34.101.60.90"
 
 ##################################################### Config for Filebeat #########################################################
 filebeat:

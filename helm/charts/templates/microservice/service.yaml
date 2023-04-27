@@ -1,13 +1,17 @@
 {{range $i, $value := .Values.microservices | default dict}}
 {{if and $value.externalPort $value.port $value.enabled}}
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
   name: vechr-microservice-{{$value.name}}
   labels:
     app: vechr-microservice-{{$value.name}}
+  annotations:
+    {{if and $.Values.gke.enabled $value.requestPath}}
+    # https://console.cloud.google.com/compute/healthChecks
+    cloud.google.com/backend-config: '{"default": "bc-{{$value.name}}"}'
+    {{end}}
 spec:
   type: NodePort
   selector:
@@ -15,6 +19,7 @@ spec:
   ports:
     - port: {{$value.externalPort}}
       targetPort: {{$value.port}}
+      nodePort: {{$value.nodePort}}
       protocol: TCP
       name: http
 
