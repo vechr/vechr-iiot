@@ -5,14 +5,19 @@ metadata:
   labels:
     app: vechr-microservice-application
   annotations:
+    {{if $.Values.gke.enabled}}  
     # https://console.cloud.google.com/compute/healthChecks
     cloud.google.com/backend-config: 
       '{
-        "default": 
-          {{range $i, $value := .Values.microservices}}
-          "bc-{{$value.name}}",
-          {{end}}
+        "ports": {
+          "30036": "bc-audit-service",
+          "30037": "bc-auth-service",
+          "30038": "bc-db-logger-service",
+          "30039": "bc-notification-service",
+          "30040": "bc-things-service"
+        }
       }'
+    {{end}}
 spec:
   type: NodePort
   selector:
