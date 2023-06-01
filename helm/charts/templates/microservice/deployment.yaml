@@ -6,26 +6,26 @@ kind: Deployment
 metadata:
   name: vechr-microservice-{{$value.name}}
   labels:
-    app: vechr-microservice-{{$value.name}}
+    app: vechr-microservice-application
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: vechr-microservice-{{$value.name}}
+      app: vechr-microservice-application
   template:
     metadata:
-      name: vechr-microservice-{{$value.name}}
+      name: vechr-microservice-service
       labels:
-        app: vechr-microservice-{{$value.name}}
+        app: vechr-microservice-application
     spec:
       restartPolicy: Always
       containers:
         - name: vechr-microservice-{{$value.name}}
           image: {{$value.image}}:{{$value.tag}}
-          {{if and $value.externalPort $value.port}}
+          {{if and $value.externalPort}}
           ports:
             - name: http
-              containerPort: {{$value.port}}
+              containerPort: {{$value.externalPort}}
               protocol: TCP
           {{ end }}
           imagePullPolicy: {{$value.imagePullPolicy | default "Always"}}

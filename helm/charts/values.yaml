@@ -21,54 +21,54 @@ ingresses:
       services:
         # backend audit
         -
-          name: vechr-microservice-audit-service
+          name: vechr-microservice-service
           path: /api/v2/audit
           port: 3004
         -
-          name: vechr-microservice-audit-service
+          name: vechr-microservice-service
           path: /api/v1/audit
           port: 3004
         -
-          name: vechr-microservice-audit-service
+          name: vechr-microservice-service
           path: /api/audit
           port: 3004
         # backend auth
         -
-          name: vechr-microservice-auth-service
+          name: vechr-microservice-service
           path: /api/v2/auth
           port: 3005
         -
-          name: vechr-microservice-auth-service
+          name: vechr-microservice-service
           path: /api/v1/auth
           port: 3005
         -
-          name: vechr-microservice-auth-service
+          name: vechr-microservice-service
           path: /api/auth
           port: 3005
         # backend notification
         -
-          name: vechr-microservice-notification-service
+          name: vechr-microservice-service
           path: /api/v2/notification
           port: 3002
         -
-          name: vechr-microservice-notification-service
+          name: vechr-microservice-service
           path: /api/v1/notification
           port: 3002
         -
-          name: vechr-microservice-notification-service
+          name: vechr-microservice-service
           path: /api/notification
           port: 3002
         # backend things
         -
-          name: vechr-microservice-things-service
+          name: vechr-microservice-service
           path: /api/v2/things
           port: 3001
         -
-          name: vechr-microservice-things-service
+          name: vechr-microservice-service
           path: /api/v1/things
           port: 3001
         -
-          name: vechr-microservice-things-service
+          name: vechr-microservice-service
           path: /api/things
           port: 3001
         # frontend
@@ -146,7 +146,7 @@ microservices:
     # these will be passed as environment variables
     env:
       - name: APP_PORT
-        value: "3000"
+        value: "3004"
       - name: NATS_URL
         value: "nats://nats-lb.default.svc.cluster.local:4222"
       - name: JWT_SECRET
@@ -158,8 +158,6 @@ microservices:
       - name: DB_URL
         value: "postgresql://vechrUser:vechr123@vechr-production-postgresql.default.svc.cluster.local:5432/audit_db?schema=public&connect_timeout=300"
 
-    # this will expose port 80 on the host on port 8080
-    port: 3000
     externalPort: 3004
     nodePort: 30036
     # Path for Health Check, it's must if we used GKE
@@ -191,7 +189,7 @@ microservices:
     # these will be passed as environment variables
     env:
       - name: APP_PORT
-        value: "3000"
+        value: "3005"
       - name: NATS_URL
         value: "nats://nats-lb.default.svc.cluster.local:4222"
       - name: JWT_SECRET
@@ -209,8 +207,6 @@ microservices:
       - name: INITIAL_SUPERUSER
         value: '{"fullName":"root","username": "root","emailAddress":"root@vechr.id","phoneNumber":"+62","password":"password123"}'
 
-    # this will expose port 3000 on the host on port 3005
-    port: 3000
     externalPort: 3005
     nodePort: 30037
     # Path for Health Check, it's must if we used GKE
@@ -242,7 +238,7 @@ microservices:
     # these will be passed as environment variables
     env:
       - name: APP_PORT
-        value: "3000"
+        value: "3003"
       - name: NATS_URL
         value: "nats://nats-lb.default.svc.cluster.local:4222"
       - name: JWT_SECRET
@@ -260,8 +256,6 @@ microservices:
       - name: INFLUX_BUCKET
         value: "Vechr"
 
-    # this will expose port 3000 on the host on port 3003
-    port: 3000
     externalPort: 3003
     nodePort: 30038
     # Path for Health Check, it's must if we used GKE
@@ -293,7 +287,7 @@ microservices:
     # these will be passed as environment variables
     env:
       - name: APP_PORT
-        value: "3000"
+        value: "3002"
       - name: NATS_URL
         value: "nats://nats-lb.default.svc.cluster.local:4222"
       - name: JWT_SECRET
@@ -313,8 +307,6 @@ microservices:
       - name: DB_URL
         value: "postgresql://vechrUser:vechr123@vechr-production-postgresql.default.svc.cluster.local:5432/notification_db?schema=public&connect_timeout=300"
 
-    # this will expose port 3000 on the host on port 3002
-    port: 3000
     externalPort: 3002
     nodePort: 30039
     # Path for Health Check, it's must if we used GKE
@@ -346,7 +338,7 @@ microservices:
     # these will be passed as environment variables
     env:
       - name: APP_PORT
-        value: "3000"
+        value: "3001"
       - name: NATS_URL
         value: "nats://nats-lb.default.svc.cluster.local:4222"
       - name: JWT_SECRET
@@ -358,8 +350,6 @@ microservices:
       - name: DB_URL
         value: "postgresql://vechrUser:vechr123@vechr-production-postgresql.default.svc.cluster.local:5432/things_db?schema=public&connect_timeout=300"
 
-    # this will expose port 3000 on the host on port 3002
-    port: 3000
     externalPort: 3001
     nodePort: 30040
     # Path for Health Check, it's must if we used GKE
