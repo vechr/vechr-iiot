@@ -160,8 +160,6 @@ microservices:
 
     externalPort: 3004
     nodePort: 30036
-    # Path for Health Check, it's must if we used GKE
-    requestPath: /api/audit
 
     # Resource
     resources:
@@ -209,8 +207,6 @@ microservices:
 
     externalPort: 3005
     nodePort: 30037
-    # Path for Health Check, it's must if we used GKE
-    requestPath: /api/auth
 
     # Resource
     resources:
@@ -258,8 +254,6 @@ microservices:
 
     externalPort: 3003
     nodePort: 30038
-    # Path for Health Check, it's must if we used GKE
-    requestPath:
 
     # Resource
     resources:
@@ -309,8 +303,6 @@ microservices:
 
     externalPort: 3002
     nodePort: 30039
-    # Path for Health Check, it's must if we used GKE
-    requestPath: /api/notification
 
     # Resource
     resources:
@@ -352,8 +344,6 @@ microservices:
 
     externalPort: 3001
     nodePort: 30040
-    # Path for Health Check, it's must if we used GKE
-    requestPath: /api/things
       
     # Resource
     resources:
