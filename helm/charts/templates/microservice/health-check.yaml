@@ -1,21 +1,11 @@
 {{if .Values.gke.enabled}}
-{{range $i, $value := .Values.microservices | default dict}}
-{{if and $value.enabled $value.requestPath}}
 ---
 apiVersion: cloud.google.com/v1
 kind: BackendConfig
 metadata:
-  name: bc-{{$value.name}}
+  name: vechr-backend-config
 spec:
-  healthCheck:
-    checkIntervalSec: 60
-    timeoutSec: 60
-    healthyThreshold: 1
-    unhealthyThreshold: 10
-    type: HTTP
-    requestPath: {{$value.requestPath}}
-    port: {{$value.nodePort}}
-
-{{end}}
-{{end}}
+  sessionAffinity:
+    affinityType: "GENERATED_COOKIE"  
+    affinityCookieTtlSec: 50
 {{end}}
