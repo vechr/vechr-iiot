@@ -4,6 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: vechr-frontend-{{ .Values.common.frontend.name }}
+  namespace: {{ include "vechr.namespace" . }}
   labels:
     app: vechr-frontend-{{ .Values.common.frontend.name }}
 spec:

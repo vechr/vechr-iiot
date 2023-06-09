@@ -1,3 +1,4 @@
+{{$namespace := include "vechr.namespace" .}}
 {{range $i, $value := .Values.serviceExternal.services | default dict}}
 {{if $value.enabled}}
 ---
@@ -5,6 +6,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{$value.name}}
+  namespace: {{ $namespace }}
   labels:
     name: {{$value.name}}
 spec:

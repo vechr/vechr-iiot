@@ -5,6 +5,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: vechr-postgres-{{$value.name}}
+  namespace: {{ include "vechr.namespace" . }}
   labels:
     app: vechr-postgres-{{$value.name}}
 spec:

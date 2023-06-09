@@ -1,3 +1,5 @@
+{{$namespace := include "vechr.namespace" .}}
+{{$secretNameTLS := .Values.natsSelfSigned.secretName}}
 {{range $i, $value := .Values.microservices | default dict}}
 {{if $value.enabled}}
 ---
@@ -5,18 +7,22 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: vechr-microservice-{{$value.name}}
+  namespace: {{ $namespace }}
   labels:
-    app: vechr-microservice-application
+    svc: vechr-app-service
+    app: vechr-service-{{$value.name}}-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: vechr-microservice-application
+      svc: vechr-app-service
+      app: vechr-service-{{$value.name}}-app
   template:
     metadata:
       name: vechr-microservice-service
       labels:
-        app: vechr-microservice-application
+        svc: vechr-app-service
+        app: vechr-service-{{$value.name}}-app
     spec:
       restartPolicy: Always
       containers:
@@ -31,6 +37,16 @@ spec:
           imagePullPolicy: {{$value.imagePullPolicy | default "Always"}}
           {{ if $value.env}}
           env:
+            - name: NATS_CA
+              value: "/certificate/ca.crt"
+            - name: NATS_KEY
+              value: "/certificate/tls.key"
+            - name: NATS_CERT
+              value: "/certificate/tls.crt"
+            - name: NATS_URL
+              value: "nats://nats-lb.{{$namespace}}.svc.cluster.local:4222"
+            - name: APP_PORT
+              value: {{$value.externalPort | quote }}
             {{range $i, $env_value := $value.env}}
             - name: {{$env_value.name}}
               value: {{quote $env_value.value}}
@@ -46,6 +62,20 @@ spec:
               memory: {{ $value.resources.limits.memory | default "1024Mi" | quote }}
               cpu: {{ $value.resources.limits.cpu | default "1" | quote }}
           {{- end}}
+          volumeMounts:
+            - name: secret-nats
+              mountPath: "/certificate/ca.crt"
+              subPath: ca.crt
+            - name: secret-nats
+              mountPath: "/certificate/tls.crt"
+              subPath: tls.crt
+            - name: secret-nats
+              mountPath: "/certificate/tls.key"
+              subPath: tls.key
 
+      volumes:
+        - name: secret-nats
+          secret:
+            secretName: {{ $secretNameTLS }}
 {{end}}
 {{end}}

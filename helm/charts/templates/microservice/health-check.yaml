@@ -4,6 +4,7 @@ apiVersion: cloud.google.com/v1
 kind: BackendConfig
 metadata:
   name: vechr-backend-config
+  namespace: {{ include "vechr.namespace" . }}
 spec:
   sessionAffinity:
     affinityType: "GENERATED_COOKIE"  

@@ -4,6 +4,7 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: {{ .Values.certmanager.ingressTLS.issuer.name }}
+  namespace: {{ include "vechr.namespace" . }}
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory

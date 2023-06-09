@@ -4,6 +4,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ default "influxdb" .Values.common.influx.name }}-config
+  namespace: {{ include "vechr.namespace" . }}
   labels:
     app: {{ default "influxdb" .Values.common.influx.name }}
 data:

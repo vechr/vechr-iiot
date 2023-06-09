@@ -5,6 +5,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: vechr-postgres-{{$value.name}}
+  namespace: {{ include "vechr.namespace" . }}
   labels:
     app: vechr-postgres-{{$value.name}}
 spec:
