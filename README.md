@@ -17,8 +17,8 @@
 
 
 <p align="center">
-  <a href="https://artifacthub.io/packages/search?repo=vechr">
-    <img alt="Artifact Hub" src="https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/vechr">
+  <a href="https://artifacthub.io/packages/helm/vechr/vechr-iiot">
+    <img alt="Artifact Hub" src="https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/vechr-iiot">
   </a>
 </p>
 
@@ -49,21 +49,6 @@ If we compare with ISA-95, the data will flow from the Bottom (PLC) to the until
 <p align="center">
   <a href="" target="blank"><img src="./images/IIoTArch.png" width="720" alt="Architecture" /></a>
 </p>
-
-## Helm Chart (Production)
-
-In this repo you can find the Helm 3 based [charts](https://github.com/vechr/vechr-atlas/tree/master/helm/charts) to install Vechr App.
-
-```sh
-> helm repo add vechr https://vechr.github.io/vechr-atlas/helm/charts/
-> helm repo update
-
-> helm repo list
-NAME          	URL 
-vechr          	https://vechr.github.io/vechr-atlas/helm/charts/
-
-> helm install vechr vechr/vechr
-```
 
 ## Setup Application (Development)
 Before pulling you'll need to all **access** for submodule repository.
