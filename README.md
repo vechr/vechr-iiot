@@ -181,4 +181,3 @@ curl -X GET http://localhost:3000/logger/query \
    -d '{"dashboardId": "87jk234", "deviceId": "9jk2b2189", "topic": "temp"}'
 ```
 
-Or you can use [OpenAPI Swagger UI](http://localhost:3000/api)
