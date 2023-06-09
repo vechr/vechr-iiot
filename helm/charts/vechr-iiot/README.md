@@ -17,5 +17,5 @@ helm install \
 # Install vechr
 helm repo add vechr https://vechr.github.io/vechr-atlas/helm/charts/
 helm repo update
-helm install vechr-production vechr/vechr
+helm install vechr-production vechr/vechr-iiot
 ```

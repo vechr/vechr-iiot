@@ -8,13 +8,12 @@ keywords:
 - IoT
 
 type: application
-version: 3.0.0
-home: https://github.com/vechr
+version: 3.0.1
+home: https://github.com/vechr/vechr-atlas
 maintainers:
   - name: zulfikar
     url: https://github.com/zulfikar4568
     email: isnaen70@gmail.com
-
 icon: https://raw.githubusercontent.com/vechr/vechr-atlas/master/images/logo.svg
 
 
