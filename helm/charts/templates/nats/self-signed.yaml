@@ -4,6 +4,7 @@ apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   name: selfsigning
+  namespace: {{ include "vechr.namespace" . }}
 spec:
   selfSigned: {}
 ---
@@ -11,6 +12,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: nats-ca
+  namespace: {{ include "vechr.namespace" . }}
 spec:
   secretName: nats-ca
   duration: 8736h # 1 year
@@ -30,6 +32,7 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: nats-ca
+  namespace: {{ include "vechr.namespace" . }}
 spec:
   ca:
     secretName: nats-ca
@@ -37,9 +40,10 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: {{ .Values.nats.cluster.tls.secret.name }}
+  name: {{ .Values.nats.config.cluster.tls.secretName }}
+  namespace: {{ include "vechr.namespace" . }}
 spec:
-  secretName: {{ .Values.nats.cluster.tls.secret.name }}
+  secretName: {{ .Values.nats.config.cluster.tls.secretName }}
   duration: 2160h # 90 days
   renewBefore: 240h # 10 days
   issuerRef:
@@ -54,9 +58,8 @@ spec:
     organizations:
       - vechr.com
   dnsNames:
-    {{if .Values.nats.cluster.dnsNames}}
-    {{range $i, $dns := .Values.nats.cluster.dnsNames}}
-    - {{$dns | quote}}
-    {{end}}
+    {{$replicaCount := .Values.nats.config.cluster.replicas | int}}
+    {{range $i := until $replicaCount}}
+    - "{{ $.Release.Name }}-nats-{{$i}}.{{ $.Release.Name }}-nats-headless"
     {{end}}
 {{end}}

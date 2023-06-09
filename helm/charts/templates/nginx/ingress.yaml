@@ -3,8 +3,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{.Values.ingresses.name}}
-  namespace:  {{.Values.ingresses.namespace}}
+  name: {{.Values.ingress.name}}
+  namespace: {{ include "vechr.namespace" . }}
   annotations:
     {{if .Values.gke.enabled}}
     # This tells Google Cloud to create an External Load Balancer to realize this Ingress
@@ -14,7 +14,7 @@ metadata:
     # This tells Google Cloud to associate the External Load Balancer with the static IP which we created earlier
     kubernetes.io/ingress.global-static-ip-name: {{.Values.gke.ingress.staticIP}}
     {{else}}
-    kubernetes.io/ingress.class: {{.Values.ingresses.ingressClassName}}
+    kubernetes.io/ingress.class: {{.Values.ingress.ingressClassName}}
     {{end}}
     # Ingress using Cert Manager Let's Encrypt
     {{if .Values.certmanager.ingressTLS.enabled}}
@@ -30,19 +30,19 @@ spec:
       - {{$host}}
       {{end}}
       {{end}}
-  {{else if .Values.ingresses.tls.enabled}}
+  {{else if .Values.ingress.tls.enabled}}
   tls:
   - hosts: 
-      {{if .Values.ingresses.tls.hosts}}
-      {{range $i, $host := .Values.ingresses.tls.hosts}}
+      {{if .Values.ingress.tls.hosts}}
+      {{range $i, $host := .Values.ingress.tls.hosts}}
       - {{$host}}
       {{end}}
       {{end}}
-    secretName: {{.Values.ingresses.tls.secretName}}
+    secretName: {{.Values.ingress.tls.secretName}}
   {{end}}
   rules:
-  {{if .Values.ingresses.rules}}
-  {{range $i, $rule := .Values.ingresses.rules}}
+  {{if .Values.ingress.rules}}
+  {{range $i, $rule := .Values.ingress.rules}}
   - host: {{$rule.host}}
     http:
       {{ if $rule.services}}

@@ -4,6 +4,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ default "influxdb" .Values.common.influx.name }}
+  namespace: {{ include "vechr.namespace" . }}
   labels:
     app: {{ default "influxdb" .Values.common.influx.name }}
 spec:
