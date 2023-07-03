@@ -18,7 +18,7 @@ services:
   
   web-app-prod:
     container_name: web-app-prod
-    image: zulfikar4568/web-app
+    image: asia-southeast2-docker.pkg.dev/vechr-iiot-389413/vechr-iiot-repository/web-app
     ports:
       - "8080:80"
     env_file:
@@ -47,7 +47,7 @@ services:
 
   db-logger-service-prod:
     container_name: db-logger-service-prod
-    image: zulfikar4568/db-logger-service
+    image: asia-southeast2-docker.pkg.dev/vechr-iiot-389413/vechr-iiot-repository/db-logger-service
     ports:
       - "3001:3000"
     env_file:
@@ -82,7 +82,7 @@ services:
   
   auth-service-prod:
     container_name: auth-service-prod
-    image: zulfikar4568/auth-service
+    image: asia-southeast2-docker.pkg.dev/vechr-iiot-389413/vechr-iiot-repository/auth-service
     ports:
       - "3002:3000"
     env_file:
@@ -118,7 +118,7 @@ services:
   
   things-service-prod:
     container_name: things-service-prod
-    image: zulfikar4568/things-service
+    image: asia-southeast2-docker.pkg.dev/vechr-iiot-389413/vechr-iiot-repository/things-service
     ports:
       - "3003:3000"
     env_file:
@@ -154,7 +154,7 @@ services:
   
   notification-service-prod:
     container_name: notification-service-prod
-    image: zulfikar4568/notification-service
+    image: asia-southeast2-docker.pkg.dev/vechr-iiot-389413/vechr-iiot-repository/notification-service
     ports:
       - "3004:3000"
     env_file:
@@ -190,7 +190,7 @@ services:
   
   audit-service-prod:
     container_name: audit-service-prod
-    image: zulfikar4568/audit-service
+    image: asia-southeast2-docker.pkg.dev/vechr-iiot-389413/vechr-iiot-repository/audit-service
     ports:
       - "3005:3000"
     env_file:
