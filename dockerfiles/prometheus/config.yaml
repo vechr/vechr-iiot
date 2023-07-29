@@ -1,0 +1,41 @@
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+    - targets: ['localhost:9090']
+
+  - job_name: 'tempo'
+    static_configs:
+    - targets: ['tempo:3200']
+
+  - job_name: 'loki'
+    static_configs:
+    - targets: ['loki:3100']
+
+  - job_name: 'db-logger-service'
+    metrics_path: /metrics
+    static_configs:
+    - targets: ['db-logger-service:8081']
+
+  - job_name: 'things-service'
+    metrics_path: /metrics
+    static_configs:
+    - targets: ['things-service:8081']
+
+  - job_name: 'auth-service'
+    metrics_path: /metrics
+    static_configs:
+    - targets: ['auth-service:8081']
+
+  - job_name: 'audit-service'
+    metrics_path: /metrics
+    static_configs:
+    - targets: ['audit-service:8081']
+
+  - job_name: 'notification-service'
+    metrics_path: /metrics
+    static_configs:
+    - targets: ['notification-service:8081']

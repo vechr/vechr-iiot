@@ -37,6 +37,7 @@ services:
       - "3001:3000"
       - "9229:9229"
       - "5556:5555"
+      - "8081"
     env_file:
       - microservices/db-logger-service/.env
     depends_on:
@@ -50,6 +51,7 @@ services:
     image: asia-southeast2-docker.pkg.dev/vechr-iiot-389413/vechr-iiot-repository/db-logger-service
     ports:
       - "3001:3000"
+      - "8081"
     env_file:
       - microservices/db-logger-service/.env
     depends_on:
@@ -71,6 +73,7 @@ services:
       - "3002:3000"
       - "9230:9229"
       - "5557:5555"
+      - "8081"
     env_file:
       - microservices/auth-service/.env
     depends_on:
@@ -85,6 +88,7 @@ services:
     image: asia-southeast2-docker.pkg.dev/vechr-iiot-389413/vechr-iiot-repository/auth-service
     ports:
       - "3002:3000"
+      - "8081"
     env_file:
       - microservices/auth-service/.env
     depends_on:
@@ -107,6 +111,7 @@ services:
       - "3003:3000"
       - "9231:9229"
       - "5558:5555"
+      - "8081"
     env_file:
       - microservices/things-service/.env
     depends_on:
@@ -121,6 +126,7 @@ services:
     image: asia-southeast2-docker.pkg.dev/vechr-iiot-389413/vechr-iiot-repository/things-service
     ports:
       - "3003:3000"
+      - "8081"
     env_file:
       - microservices/things-service/.env
     depends_on:
@@ -143,6 +149,7 @@ services:
       - "3004:3000"
       - "9232:9229"
       - "5559:5555"
+      - "8081"
     env_file:
       - ./microservices/notification-service/.env
     depends_on:
@@ -157,6 +164,7 @@ services:
     image: asia-southeast2-docker.pkg.dev/vechr-iiot-389413/vechr-iiot-repository/notification-service
     ports:
       - "3004:3000"
+      - "8081"
     env_file:
       - ./microservices/notification-service/.env
     depends_on:
@@ -179,6 +187,7 @@ services:
       - "3005:3000"
       - "9233:9229"
       - "5560:5555"
+      - "8081"
     env_file:
       - ./microservices/audit-service/.env
     depends_on:
@@ -193,6 +202,7 @@ services:
     image: asia-southeast2-docker.pkg.dev/vechr-iiot-389413/vechr-iiot-repository/audit-service
     ports:
       - "3005:3000"
+      - "8081"
     env_file:
       - ./microservices/audit-service/.env
     depends_on:
@@ -201,7 +211,73 @@ services:
       - mosquitto
       - nats-box
       - postgres-db
-      
+  
+  tempo:
+    container_name: tempo-vechr
+    image: grafana/tempo:latest
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./dockerfiles/tempo/config.yaml:/etc/tempo.yaml
+      - ./data/tempo-data:/tmp/tempo
+    ports:
+      - "14268:14268"  # jaeger ingest, Jaeger - Thrift HTTP
+      - "14250:14250" # Jaeger - GRPC
+      - "3200:3200"   # tempo
+      - "9095:9095" # tempo grpc
+      - "4317:4317"  # otlp grpc
+      - "4318:4318"  # otlp http
+      - "9411:9411"   # zipkin
+
+  prometheus:
+    container_name: prometheus-vechr
+    image: prom/prometheus:latest
+    volumes:
+      - ./dockerfiles/prometheus/config.yaml:/etc/prometheus.yaml
+    entrypoint:
+      - /bin/prometheus
+      - --config.file=/etc/prometheus.yaml
+      - --web.enable-remote-write-receiver
+    ports:
+      - "9090:9090"
+
+  loki:
+    container_name: loki-vechr
+    image: grafana/loki:2.8.0
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/loki.yaml
+    environment:
+      - JAEGER_AGENT_HOST=tempo
+      - JAEGER_ENDPOINT=http://tempo:14268/api/traces # send traces to Tempo
+      - JAEGER_SAMPLER_TYPE=const
+      - JAEGER_SAMPLER_PARAM=1
+    volumes:
+      - ./dockerfiles/loki/config.yaml:/etc/loki/loki.yaml
+      - ./data/loki-data:/tmp/loki
+
+  promtail:
+    container_name: promtail-vechr
+    image: grafana/promtail:2.8.0
+    volumes:
+      - /var/log:/var/log
+    command: -config.file=/etc/promtail/config.yml
+
+  grafana:
+    container_name: grafana-vechr
+    image: grafana/grafana:latest
+    volumes:
+      - ./dockerfiles/grafana/datasources:/etc/grafana/provisioning/datasources
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+      - tempo
+      - loki
+
   postgres-db:
     container_name: postgres-db
     image: postgres:14.3-alpine
@@ -375,5 +451,5 @@ volumes:
 
 networks:
   default:
-    name: nats_mqtt_network
+    name: vechr_iiot_network
     driver: bridge
