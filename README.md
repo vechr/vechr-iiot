@@ -53,6 +53,13 @@ If we compare with ISA-95, the data will flow from the Bottom (PLC) to the until
 ## Setup Application (Development)
 Before pulling you'll need to all **access** for submodule repository.
 
+### Import Certificate
+Import `./certificate/self-signed/rootCA.pem` or you can generate by your self, be aware that you need to create `./certificate/self-signed/ingress` and `./certificate/self-signed/nats` as well. Import in our browser or OS so we will have secure connection https
+
+Here are some article how to import the certificate: </br>
+[In MAC](https://support.apple.com/en-in/guide/keychain-access/kyca2431/mac)</br>
+[In Chrome](https://docs.vmware.com/en/VMware-Adapter-for-SAP-Landscape-Management/2.1.0/Installation-and-Administration-Guide-for-VLA-Administrators/GUID-D60F08AD-6E54-4959-A272-458D08B8B038.html)
+
 ### Pull repository
 ```
 git clone --recursive git@github.com:vechr/vechr-atlas.git
@@ -60,8 +67,18 @@ git clone --recursive git@github.com:vechr/vechr-atlas.git
 
 Edit `.env` file, configure `APP_LISTS`, this line will decided what are the list of container that you'll run.
 ```
-APP_LISTS=web-app,notification-service,db-logger-service,things-service,mail-dev,konga,konga-prepare,kong,postgres-db,pg-admin4,influxdb,nats-server,mosquitto
+APP_LISTS=grafana,tempo,loki,promtail,prometheus,audit-service,notification-service,mail-dev,web-app,konga,konga-prepare,kong,postgres-db,pg-admin4,things-service,auth-service,db-logger-service,influxdb,nats-server,mosquitto,nats-box
 ```
+
+### Configured `.env` in each application
+You need to setup the .env variable file, and see in each application have `.env.example`
+1. `application/web-app/.env` <== See `application/web-app/.env.example`
+2. `microservices/audit-service/.env` <== See `microservices/audit-service/.env.example`
+3. `microservices/auth-service/.env` <== See `microservices/auth-service/.env.example`
+4. `microservices/db-logger-service/.env` <== See `microservices/db-logger-service/.env.example`
+5. `microservices/notification-service/.env` <== See `microservices/notification-service/.env.example`
+6. `microservices/things-service/.env` <== See `microservices/things-service/.env.example`
+7. `.env` <== `.env.example`
 ### Allowing Script
 Script must be have an access before executing
 ```
