@@ -62,7 +62,7 @@ Here are some article how to import the certificate: </br>
 
 ### Pull repository
 ```
-git clone --recursive git@github.com:vechr/vechr-atlas.git
+git clone --recursive git@github.com:vechr/vechr-iiot.git
 ```
 
 Edit `.env` file, configure `APP_LISTS`, this line will decided what are the list of container that you'll run.
