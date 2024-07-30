@@ -67,18 +67,17 @@ git clone --recursive git@github.com:vechr/vechr-atlas.git
 
 Edit `.env` file, configure `APP_LISTS`, this line will decided what are the list of container that you'll run.
 ```
-APP_LISTS=grafana,tempo,loki,promtail,prometheus,audit-service,notification-service,mail-dev,web-app,konga,konga-prepare,kong,postgres-db,pg-admin4,things-service,auth-service,db-logger-service,influxdb,nats-server,mosquitto,nats-box
+APP_LISTS=grafana,tempo,loki,promtail,prometheus,notification-service,mail-dev,web-app,konga,konga-prepare,kong,postgres-db,pg-admin4,things-service,auth-service,db-logger-service,influxdb,nats-server,mosquitto,nats-box
 ```
 
 ### Configured `.env` in each application
 You need to setup the .env variable file, and see in each application have `.env.example`
 1. `application/web-app/.env` <== See `application/web-app/.env.example`
-2. `microservices/audit-service/.env` <== See `microservices/audit-service/.env.example`
-3. `microservices/auth-service/.env` <== See `microservices/auth-service/.env.example`
-4. `microservices/db-logger-service/.env` <== See `microservices/db-logger-service/.env.example`
-5. `microservices/notification-service/.env` <== See `microservices/notification-service/.env.example`
-6. `microservices/things-service/.env` <== See `microservices/things-service/.env.example`
-7. `.env` <== `.env.example`
+2. `microservices/auth-service/.env` <== See `microservices/auth-service/.env.example`
+3. `microservices/db-logger-service/.env` <== See `microservices/db-logger-service/.env.example`
+4. `microservices/notification-service/.env` <== See `microservices/notification-service/.env.example`
+5. `microservices/things-service/.env` <== See `microservices/things-service/.env.example`
+6. `.env` <== `.env.example`
 ### Allowing Script
 Script must be have an access before executing
 ```
@@ -97,7 +96,6 @@ After all container running, Setup the API gateway
 ```bash
 ./dockerfiles/kong/setup-notification.sh
 ./dockerfiles/kong/setup-things.sh
-./dockerfiles/kong/setup-audit.sh
 ./dockerfiles/kong/setup-auth.sh
 ```
 
