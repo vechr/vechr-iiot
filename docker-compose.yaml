@@ -303,17 +303,15 @@ services:
 
   nats-server:
     container_name: nats-server
-    build:
-      context: ./dockerfiles
-      dockerfile: ./nats/nats.dockerfile
-      args:
-        - NATS_VERSION=${NATS_VERSION:-alpine}
+    image: nats:${NATS_VERSION:-alpine}
+    command: -c /config/standalone.conf
     volumes:
       - ./certificate:/certificate
+      - ./dockerfiles/nats:/config
     ports:
       - 1883:1883
       - 4222:4222
-      - 9000:9090
+      - 9000:9000
 
    # Eclipse Mosquitto MQTT Broker
   mosquitto:
