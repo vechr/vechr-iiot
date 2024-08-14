@@ -67,7 +67,7 @@ git clone --recursive git@github.com:vechr/vechr-iiot.git
 
 Edit `.env` file, configure `APP_LISTS`, this line will decided what are the list of container that you'll run.
 ```
-APP_LISTS=grafana,tempo,loki,promtail,prometheus,notification-service,mail-dev,web-app,konga,konga-prepare,kong,postgres-db,pg-admin4,things-service,auth-service,db-logger-service,influxdb,nats-server,mosquitto,nats-box
+APP_LISTS=api-gateway,redis,grafana,tempo,loki,promtail,prometheus,notification-service,mail-dev,web-app,postgres-db,pg-admin4,things-service,auth-service,db-logger-service,influxdb,nats-server,mosquitto,nats-box
 ```
 
 ### Configured `.env` in each application
@@ -92,18 +92,19 @@ Running all container
 ./up.sh
 ```
 
-After all container running, Setup the API gateway
+### Test the connection
+Try to ping the connection, if cannot be access, you need to settings the hosts files
 ```bash
-./dockerfiles/kong/setup-notification.sh
-./dockerfiles/kong/setup-things.sh
-./dockerfiles/kong/setup-auth.sh
+ping app.vechr.com
+ping nats.vechr.com
 ```
 
-### Setup Account Kong
-Go to `http://localhost:1337`
-1. Create your account
-2. Login
-3. Setup the connection with the kong, in this case we use `http://kong:8001` as a kong admin API
+In MAC or Linux, and set `/etc/hosts`, if your environment windows setting in `C:\Windows\System32\drivers\etc\hosts`
+```h
+127.0.0.1 app.vechr.com
+127.0.0.1 nats.vechr.com
+```
+
 
 ## Stoping All Container
 ```bash
@@ -172,12 +173,3 @@ Please use this topic format to store in database
 ```bash
 mosquitto_pub -h nats-server -p 1883 -t "Vechr/DashboardID/87jk234/DeviceID/9jk2b2189/topic/temp" -m "80.23"
 ```
-
-## Query Data using Rest API
-Using curl
-```bash
-curl -X GET http://localhost:3000/logger/query \
-   -H 'Content-Type: application/json' \
-   -d '{"dashboardId": "87jk234", "deviceId": "9jk2b2189", "topic": "temp"}'
-```
-
