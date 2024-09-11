@@ -173,3 +173,8 @@ Please use this topic format to store in database
 ```bash
 mosquitto_pub -h nats-server -p 1883 -t "Vechr/DashboardID/87jk234/DeviceID/9jk2b2189/topic/temp" -m "80.23"
 ```
+
+## Use dummy Infinite Loop Send message to NATS
+```bash
+while true; do nats pub -s nats://nats.vechr.com:4222 Vechr.DashboardID.04916c8e-0ff5-4a18-943a-bf5e428035c2.DeviceID.c1e241db-3d93-4eb5-a58d-c6b2a57c9ae3.TopicID.bde3bd17-dd97-46b2-990f-eca2fc80f356.Topic.oee.availability $(($RANDOM%(100-80+1)+80)) && sleep 0.5; done
+```
