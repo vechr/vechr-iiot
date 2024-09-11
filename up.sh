@@ -47,7 +47,7 @@ done <<< "$APP_LISTS"
 # Include base container
 CONTAINER_SETUP_LISTS+="$CONTAINER_BASE "
 
-docker-compose up -d $CONTAINER_SETUP_LISTS
+docker compose up -d $CONTAINER_SETUP_LISTS
 
 echo ""
 printf "${GREEN}"

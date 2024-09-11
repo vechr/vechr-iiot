@@ -67,18 +67,17 @@ git clone --recursive git@github.com:vechr/vechr-iiot.git
 
 Edit `.env` file, configure `APP_LISTS`, this line will decided what are the list of container that you'll run.
 ```
-APP_LISTS=grafana,tempo,loki,promtail,prometheus,audit-service,notification-service,mail-dev,web-app,konga,konga-prepare,kong,postgres-db,pg-admin4,things-service,auth-service,db-logger-service,influxdb,nats-server,mosquitto,nats-box
+APP_LISTS=api-gateway,redis,grafana,tempo,loki,promtail,prometheus,notification-service,mail-dev,web-app,postgres-db,pg-admin4,things-service,auth-service,db-logger-service,influxdb,nats-server,mosquitto,nats-box
 ```
 
 ### Configured `.env` in each application
 You need to setup the .env variable file, and see in each application have `.env.example`
 1. `application/web-app/.env` <== See `application/web-app/.env.example`
-2. `microservices/audit-service/.env` <== See `microservices/audit-service/.env.example`
-3. `microservices/auth-service/.env` <== See `microservices/auth-service/.env.example`
-4. `microservices/db-logger-service/.env` <== See `microservices/db-logger-service/.env.example`
-5. `microservices/notification-service/.env` <== See `microservices/notification-service/.env.example`
-6. `microservices/things-service/.env` <== See `microservices/things-service/.env.example`
-7. `.env` <== `.env.example`
+2. `microservices/auth-service/.env` <== See `microservices/auth-service/.env.example`
+3. `microservices/db-logger-service/.env` <== See `microservices/db-logger-service/.env.example`
+4. `microservices/notification-service/.env` <== See `microservices/notification-service/.env.example`
+5. `microservices/things-service/.env` <== See `microservices/things-service/.env.example`
+6. `.env` <== `.env.example`
 ### Allowing Script
 Script must be have an access before executing
 ```
@@ -93,19 +92,19 @@ Running all container
 ./up.sh
 ```
 
-After all container running, Setup the API gateway
+### Test the connection
+Try to ping the connection, if cannot be access, you need to settings the hosts files
 ```bash
-./dockerfiles/kong/setup-notification.sh
-./dockerfiles/kong/setup-things.sh
-./dockerfiles/kong/setup-audit.sh
-./dockerfiles/kong/setup-auth.sh
+ping app.vechr.com
+ping nats.vechr.com
 ```
 
-### Setup Account Kong
-Go to `http://localhost:1337`
-1. Create your account
-2. Login
-3. Setup the connection with the kong, in this case we use `http://kong:8001` as a kong admin API
+In MAC or Linux, and set `/etc/hosts`, if your environment windows setting in `C:\Windows\System32\drivers\etc\hosts`
+```h
+127.0.0.1 app.vechr.com
+127.0.0.1 nats.vechr.com
+```
+
 
 ## Stoping All Container
 ```bash
@@ -175,11 +174,7 @@ Please use this topic format to store in database
 mosquitto_pub -h nats-server -p 1883 -t "Vechr/DashboardID/87jk234/DeviceID/9jk2b2189/topic/temp" -m "80.23"
 ```
 
-## Query Data using Rest API
-Using curl
+## Use dummy Infinite Loop Send message to NATS
 ```bash
-curl -X GET http://localhost:3000/logger/query \
-   -H 'Content-Type: application/json' \
-   -d '{"dashboardId": "87jk234", "deviceId": "9jk2b2189", "topic": "temp"}'
+while true; do nats pub -s nats://nats.vechr.com:4222 Vechr.DashboardID.04916c8e-0ff5-4a18-943a-bf5e428035c2.DeviceID.c1e241db-3d93-4eb5-a58d-c6b2a57c9ae3.TopicID.bde3bd17-dd97-46b2-990f-eca2fc80f356.Topic.oee.availability $(($RANDOM%(100-80+1)+80)) && sleep 0.5; done
 ```
-
