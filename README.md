@@ -53,14 +53,14 @@ If we compare with ISA-95, the data will flow from the Bottom (PLC) to the until
 ## Setup Application (Development)
 Before pulling you'll need to all **access** for submodule repository.
 
-### Import Certificate
+### 1. Import Certificate
 Import `./certificate/self-signed/rootCA.pem` or you can generate by your self, be aware that you need to create `./certificate/self-signed/ingress` and `./certificate/self-signed/nats` as well. Import in our browser or OS so we will have secure connection https
 
 Here are some article how to import the certificate: </br>
 [In MAC](https://support.apple.com/en-in/guide/keychain-access/kyca2431/mac)</br>
 [In Chrome](https://docs.vmware.com/en/VMware-Adapter-for-SAP-Landscape-Management/2.1.0/Installation-and-Administration-Guide-for-VLA-Administrators/GUID-D60F08AD-6E54-4959-A272-458D08B8B038.html)
 
-### Pull repository
+### 2. Pull repository
 ```
 git clone --recursive git@github.com:vechr/vechr-iiot.git
 ```
@@ -70,7 +70,7 @@ Edit `.env` file, configure `APP_LISTS`, this line will decided what are the lis
 APP_LISTS=api-gateway,redis,grafana,tempo,loki,promtail,prometheus,notification-service,mail-dev,web-app,postgres-db,pg-admin4,things-service,auth-service,db-logger-service,influxdb,nats-server,mosquitto,nats-box
 ```
 
-### Configured `.env` in each application
+### 3. Configured `.env` in each application
 You need to setup the .env variable file, and see in each application have `.env.example`
 1. `application/web-app/.env` <== See `application/web-app/.env.example`
 2. `microservices/auth-service/.env` <== See `microservices/auth-service/.env.example`
@@ -78,21 +78,21 @@ You need to setup the .env variable file, and see in each application have `.env
 4. `microservices/notification-service/.env` <== See `microservices/notification-service/.env.example`
 5. `microservices/things-service/.env` <== See `microservices/things-service/.env.example`
 6. `.env` <== `.env.example`
-### Allowing Script
+### 4. Allowing Script
 Script must be have an access before executing
 ```
 chmod 777 scripts/
 chmod 777 ./dockerfiles/database/postgres/create-multiple-db.sh
 ```
 
-### Running Application
+### 5. Running Application
 
 Running all container
 ```bash
 ./up.sh
 ```
 
-### Test the connection
+### 6. Test the connection
 Try to ping the connection, if cannot be access, you need to settings the hosts files
 ```bash
 ping app.vechr.com
@@ -105,28 +105,35 @@ In MAC or Linux, and set `/etc/hosts`, if your environment windows setting in `C
 127.0.0.1 nats.vechr.com
 ```
 
+### 7. Access the Application
+You can try to access the application, you can visit the app in here `https://app.vechr.com`
 
-## Stoping All Container
+## Administrative Matters
+### 1. Starting All Container
+```bash
+./up.sh
+```
+### 2. Stoping All Container
 ```bash
 ./down.sh
 ```
 
-## Logs container
+### 3. Logs container
 ```bash
 #example
 ./logs.sh influxdb
 ```
 
-## SSH to container
+### 4. SSH to container
 ```bash
 #example
 ./ssh.sh nats-box
 ```
 
-# Testing NATS with MQTT (Start Publish Subscribe)
+## Testing NATS with MQTT (Start Publish Subscribe)
 Open 4 terminal, and run each command below
 
-## Subscribe to MQTT topic on Terminal 1
+### 1. Subscribe to MQTT topic on Terminal 1
 This command will listen on topic `NATS/MQTT/Test/#` mqtt
 ```bash
 # ssh to container
@@ -137,7 +144,7 @@ This command will listen on topic `NATS/MQTT/Test/#` mqtt
 mosquitto_sub -h nats-server -p 1883 -t "NATS/MQTT/Test/#"
 ```
 
-## Subcribe to NATS Subject on Terminal 2
+### 2. Subcribe to NATS Subject on Terminal 2
 This command will listen on subject `NATS.MQTT.Test/>` nats
 ```bash
 # ssh to container
@@ -146,7 +153,7 @@ This command will listen on subject `NATS.MQTT.Test/>` nats
 nats -s nats://nats-server sub "NATS.MQTT.Test.>"
 ```
 
-## Publish to NATS subject on Terminal 3
+### 3. Publish to NATS subject on Terminal 3
 You can execute this command several time
 ```bash
 # ssh to container
@@ -155,7 +162,7 @@ You can execute this command several time
 nats -s nats://nats-server pub "NATS.MQTT.Test.>" "This is message from nats"
 ```
 
-## Publish to MQTT topic on Terminal 4
+### 4. Publish to MQTT topic on Terminal 4
 You can execute this script several time
 ```bash
 # ssh to container
@@ -167,7 +174,7 @@ mosquitto_pub -h nats-server -p 1883 -t "NATS/MQTT/Test/" -m "This is message fr
 ```
 
 
-## Publish MQTT Data
+### 5. Publish MQTT Data
 Please use this topic format to store in database
 `Vechr/DashboardID/<Your Dashboard ID>/DeviceID/<Your Device ID>/topic/<Your Topic Name>`
 ```bash
