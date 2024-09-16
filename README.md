@@ -54,7 +54,9 @@ If we compare with ISA-95, the data will flow from the Bottom (PLC) to the until
 Before pulling you'll need to all **access** for submodule repository.
 
 ### 1. Import Certificate
-Import `./certificate/self-signed/rootCA.pem` or you can generate by your self, be aware that you need to create `./certificate/self-signed/ingress` and `./certificate/self-signed/nats` as well. Import in our browser or OS so we will have secure connection https
+Download or Import [root certificate](./certificate/self-signed/rootCA.pem) or you can generate by your self, be aware that you need to create for  [./certificate/self-signed/ingress](./certificate/self-signed/ingress) and [./certificate/self-signed/nats](./certificate/self-signed/nats) as well. Import in our browser or OS so we will have secure connection https
+
+If you don't now how to generate your own certificate, you can try to follow this [tutorial](./certificate/self-signed/README.md)
 
 Here are some article how to import the certificate: </br>
 [In MAC](https://support.apple.com/en-in/guide/keychain-access/kyca2431/mac)</br>
@@ -62,7 +64,7 @@ Here are some article how to import the certificate: </br>
 
 ### 2. Pull repository
 ```
-git clone --recursive git@github.com:vechr/vechr-iiot.git
+git clone --recursive https://github.com/vechr/vechr-iiot.git
 ```
 
 Edit `.env` file, configure `APP_LISTS`, this line will decided what are the list of container that you'll run.
