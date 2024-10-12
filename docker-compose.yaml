@@ -27,13 +27,13 @@ services:
       - notification-service
       - auth-service
   
-  web-app-prod:
-    container_name: web-app-prod
-    image: asia-southeast2-docker.pkg.dev/vechr-iiot-389413/vechr-iiot-repository/web-app
-    ports:
-      - "8080:80"
-    env_file:
-      - application/web-app/.env
+  # web-app-prod:
+  #   container_name: web-app-prod
+  #   image: asia-southeast2-docker.pkg.dev/vechr-iiot-389413/vechr-iiot-repository/web-app
+  #   ports:
+  #     - "8080:80"
+  #   env_file:
+  #     - application/web-app/.env
 
   db-logger-service:
     container_name: db-logger-service
@@ -57,19 +57,19 @@ services:
       - mosquitto
       - nats-box
 
-  db-logger-service-prod:
-    container_name: db-logger-service-prod
-    image: asia-southeast2-docker.pkg.dev/vechr-iiot-389413/vechr-iiot-repository/db-logger-service
-    ports:
-      - "3001:3000"
-      - "8081"
-    env_file:
-      - microservices/db-logger-service/.env
-    depends_on:
-      - influxdb
-      - nats-server
-      - mosquitto
-      - nats-box
+  # db-logger-service-prod:
+  #   container_name: db-logger-service-prod
+  #   image: asia-southeast2-docker.pkg.dev/vechr-iiot-389413/vechr-iiot-repository/db-logger-service
+  #   ports:
+  #     - "3001:3000"
+  #     - "8081"
+  #   env_file:
+  #     - microservices/db-logger-service/.env
+  #   depends_on:
+  #     - influxdb
+  #     - nats-server
+  #     - mosquitto
+  #     - nats-box
 
   auth-service:
     container_name: auth-service
@@ -94,20 +94,20 @@ services:
       - nats-box
       - postgres-db
   
-  auth-service-prod:
-    container_name: auth-service-prod
-    image: asia-southeast2-docker.pkg.dev/vechr-iiot-389413/vechr-iiot-repository/auth-service
-    ports:
-      - "3002:3000"
-      - "8081"
-    env_file:
-      - microservices/auth-service/.env
-    depends_on:
-      - influxdb
-      - nats-server
-      - mosquitto
-      - nats-box
-      - postgres-db
+  # auth-service-prod:
+  #   container_name: auth-service-prod
+  #   image: asia-southeast2-docker.pkg.dev/vechr-iiot-389413/vechr-iiot-repository/auth-service
+  #   ports:
+  #     - "3002:3000"
+  #     - "8081"
+  #   env_file:
+  #     - microservices/auth-service/.env
+  #   depends_on:
+  #     - influxdb
+  #     - nats-server
+  #     - mosquitto
+  #     - nats-box
+  #     - postgres-db
 
   things-service:
     container_name: things-service
@@ -132,20 +132,20 @@ services:
       - nats-box
       - postgres-db
   
-  things-service-prod:
-    container_name: things-service-prod
-    image: asia-southeast2-docker.pkg.dev/vechr-iiot-389413/vechr-iiot-repository/things-service
-    ports:
-      - "3003:3000"
-      - "8081"
-    env_file:
-      - microservices/things-service/.env
-    depends_on:
-      - influxdb
-      - nats-server
-      - mosquitto
-      - nats-box
-      - postgres-db
+  # things-service-prod:
+  #   container_name: things-service-prod
+  #   image: asia-southeast2-docker.pkg.dev/vechr-iiot-389413/vechr-iiot-repository/things-service
+  #   ports:
+  #     - "3003:3000"
+  #     - "8081"
+  #   env_file:
+  #     - microservices/things-service/.env
+  #   depends_on:
+  #     - influxdb
+  #     - nats-server
+  #     - mosquitto
+  #     - nats-box
+  #     - postgres-db
   
   notification-service:
     container_name: notification-service
@@ -170,20 +170,20 @@ services:
       - nats-box
       - postgres-db
   
-  notification-service-prod:
-    container_name: notification-service-prod
-    image: asia-southeast2-docker.pkg.dev/vechr-iiot-389413/vechr-iiot-repository/notification-service
-    ports:
-      - "3004:3000"
-      - "8081"
-    env_file:
-      - ./microservices/notification-service/.env
-    depends_on:
-      - influxdb
-      - nats-server
-      - mosquitto
-      - nats-box
-      - postgres-db
+  # notification-service-prod:
+  #   container_name: notification-service-prod
+  #   image: asia-southeast2-docker.pkg.dev/vechr-iiot-389413/vechr-iiot-repository/notification-service
+  #   ports:
+  #     - "3004:3000"
+  #     - "8081"
+  #   env_file:
+  #     - ./microservices/notification-service/.env
+  #   depends_on:
+  #     - influxdb
+  #     - nats-server
+  #     - mosquitto
+  #     - nats-box
+  #     - postgres-db
 
   # Redis for cached    
   redis:
@@ -271,9 +271,9 @@ services:
     ports:
       - 5433:5432
     environment:
-      - POSTGRES_MULTIPLE_DATABASES=${POSTGRES_MULTIPLE_DATABASES}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_MULTIPLE_DATABASES=${POSTGRES_MULTIPLE_DATABASES:-auth-db,things-db,notification-db}
+      - POSTGRES_USER=${POSTGRES_USER:-Vechr}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-123}
 
   pg-admin4:
     container_name: pg-admin4
@@ -281,8 +281,8 @@ services:
     ports:
       - 5050:80
     environment:
-      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
-      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL:-pgadmin@Vechr.com}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD:-123}
 
   influxdb:
     image: influxdb:2.1.0-alpine
@@ -290,11 +290,11 @@ services:
     restart: always
     environment:
       - DOCKER_INFLUXDB_INIT_MODE=setup
-      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USER}
-      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PASS}
-      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_ORG} 
-      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_BUCKET}
-      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_TOKEN}
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USER:-admin}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PASS:-admin}
+      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_ORG:-Vechr} 
+      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_BUCKET:-Vechr}
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_TOKEN:-my-token}
     ports:
       - '8086:8086'
     volumes:
@@ -321,8 +321,8 @@ services:
       args:
         - MOSQUITTO_VERSION=${MOSQUITTO_VERSION:-latest}
     environment:
-      - MOSQUITTO_USERNAME=${MOSQUITTO_USERNAME}
-      - MOSQUITTO_PASSWORD=${MOSQUITTO_PASSWORD}
+      - MOSQUITTO_USERNAME=${MOSQUITTO_USERNAME:-mosquitto}
+      - MOSQUITTO_PASSWORD=${MOSQUITTO_PASSWORD:-mosquitto}
     restart: always
     volumes:
       - ./scripts:/scripts
@@ -341,9 +341,9 @@ services:
     container_name: mail-dev
     image: maildev/maildev
     ports:
-      - ${EMAIL_SMTP_SERVER_PORT}:${EMAIL_SMTP_SERVER_PORT}
-      - ${EMAIL_SMTP_WEB}:${EMAIL_SMTP_WEB}
-    command: bin/maildev -w ${EMAIL_SMTP_WEB} -s ${EMAIL_SMTP_SERVER_PORT} --outgoing-host ${EMAIL_OUTGOING_HOST} --outgoing-user ${EMAIL_OUTGOING_ID} --outgoing-pass ${EMAIL_OUTGOING_PASS} --outgoing-port ${EMAIL_OUTGOING_PORT}
+      - ${EMAIL_SMTP_SERVER_PORT:-1025}:${EMAIL_SMTP_SERVER_PORT:-1025}
+      - ${EMAIL_SMTP_WEB:-1080}:${EMAIL_SMTP_WEB:-1080}
+    command: bin/maildev -w ${EMAIL_SMTP_WEB:-1080} -s ${EMAIL_SMTP_SERVER_PORT:-1025} --outgoing-host ${EMAIL_OUTGOING_HOST:-smtp.vechr.com} --outgoing-user ${EMAIL_OUTGOING_ID:-support@vechr.com} --outgoing-pass ${EMAIL_OUTGOING_PASS:-Vechr} --outgoing-port ${EMAIL_OUTGOING_PORT:-25}
     
 volumes:
   influxdb_data:
