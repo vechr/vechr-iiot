@@ -72,6 +72,8 @@ Edit `.env` file, configure `APP_LISTS`, this line will decided what are the lis
 APP_LISTS=api-gateway,redis,grafana,tempo,loki,promtail,prometheus,notification-service,mail-dev,web-app,postgres-db,pg-admin4,things-service,auth-service,db-logger-service,influxdb,nats-server,mosquitto,nats-box
 ```
 
+**IMPORTANT NOTE!!**: If you run on windows please checkout [documentation](./Windows.md), because some of bash script is doesn't work, or you might be want to access using kubernetes please checkout this [page](https://helm.vechr.com/)
+
 ### 3. Configured `.env` in each application
 You need to setup the .env variable file, and see in each application have `.env.example`
 1. `application/web-app/.env` <== See `application/web-app/.env.example`
