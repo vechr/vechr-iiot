@@ -271,7 +271,7 @@ services:
     ports:
       - 5433:5432
     environment:
-      - POSTGRES_MULTIPLE_DATABASES=${POSTGRES_MULTIPLE_DATABASES:-auth-db,things-db,notification-db}
+      - POSTGRES_MULTIPLE_DATABASES=${POSTGRES_MULTIPLE_DATABASES:-auth_db,things_db,notification_db}
       - POSTGRES_USER=${POSTGRES_USER:-Vechr}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-123}
 
